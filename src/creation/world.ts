@@ -36,7 +36,9 @@ function plant(x:number,y:number,scale:number,t:number,seed:number) {
   const bend=Math.sin(t*.025+seed+i)*3;
   leaves+=`<path d="M0 ${f(sy)}Q${f(side*length)} ${f(sy-length*.7+bend)} ${f(side*length*1.2)} ${f(sy-length*.3)}Q${f(side*length*.6)} ${f(sy+8)} 0 ${f(sy)}Z" fill="url(#${i%2?'c-foliage':'c-foliageShade'})"/><path d="M0 ${f(sy)}L${f(side*length)} ${f(sy-length*.27)}" stroke="#c4d9a2" stroke-width="1" opacity=".5"/>`;
  }
- return `<g transform="translate(${x} ${y}) scale(${scale})"><path d="M0 0Q${Math.sin(t*.02+seed)*7} ${f(-height*.5)} 0 ${f(-height)}" stroke="#a1bc83" stroke-width="4" fill="none"/>${leaves}</g>`;
+ // Wind is deliberately subtle and off-phase per plant, instead of synchronised rigid movement.
+ const sway=Math.sin(t*.012+seed*1.9)*1.1+Math.sin(t*.023+seed*.6)*.35;
+ return `<g transform="translate(${x} ${y}) scale(${scale}) rotate(${f(sway)})"><path d="M0 0Q${Math.sin(t*.02+seed)*7} ${f(-height*.5)} 0 ${f(-height)}" stroke="#a1bc83" stroke-width="4" fill="none"/>${leaves}</g>`;
 }
 function fruitTree(x:number,y:number,size:number,t:number,growth:number) {
  const sway=Math.sin(t*.013+x)*1.7;
@@ -84,8 +86,12 @@ export function renderWorld(frame:number,scene:Scene,width:number,height:number)
  const reframe=vertical||scene.id==='eden'?0:smooth((t-(scene.id==='hook'?220:130))/35);
  const centerX=width*(vertical?.5:lerp(.68,.5,reframe)),centerY=height*(vertical?.36:.43);
  const scale=(vertical?1.05:1)*unit*(1+reframe*.18);
- const shot=Math.floor(t/120),push=1+(t%120)/120*.035;
- const cx=centerX+Math.sin(shot*.7)*14*unit,cy=centerY+Math.sin(t*.003)*8*unit;
+ // Keep the camera continuous: resetting a 120-frame zoom created a visible snap every 4 seconds.
+ // Frame-derived movement remains deterministic for Remotion's out-of-order rendering.
+ const shot=Math.floor(t/120); // shot marker retained for QA/inspection
+ const push=1+.035*smooth(p);
+ const cameraDrift=Math.sin(t*.006)*.75+Math.sin(t*.002+.8)*.25;
+ const cx=centerX+cameraDrift*14*unit,cy=centerY+Math.sin(t*.003)*8*unit;
  const previousScene=data.scenes[Math.max(0,data.scenes.findIndex(s=>s.id===scene.id)-1)];
  const previousTheme=THEMES[previousScene.id],transition=smooth(t/12);
  const defs=`<defs>${grad('c-bg',[blendColor(previousTheme.top,theme.top,transition),blendColor(previousTheme.bottom,theme.bottom,transition)])}${radial('c-halo',theme.accent,.24)}${radial('c-flare','#fff2c7',.9)}${grad('c-sun',['#fff9d9','#f7c46e','#ae6e3f'])}${grad('c-moon',['#eef0da','#a3b2c5','#4e607d'])}${grad('c-water',['#7bb8b6','#195b70','#0b354c'])}${grad('c-land',['#b4bf94','#6d9c80','#305d61'])}${grad('c-animal',['#e0c299','#ab8f6e','#675e59'])}${grad('c-human',['#efdab8','#cfad8b','#8c7b6f'])}</defs>`;
