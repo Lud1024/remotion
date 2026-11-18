@@ -1,0 +1,20 @@
+{
+  "audioSeconds": 139.650563,
+  "videoSeconds": 141.66666666666666,
+  "samplePeakDb": -1.9605945809799554,
+  "integratedLufs": -16.31,
+  "truePeakDb": -1.93,
+  "effectsGain": 0.65,
+  "effectsIncreaseDb": 3.1940168573502374,
+  "mobileBand": {
+    "rangeHz": [
+      300,
+      4000
+    ],
+    "integratedLufs": -31.88,
+    "truePeakDb": -13.49,
+    "retainedEnergyDb": -2.14750098747631
+  },
+  "narrationTracks": 1,
+  "note": "Phone-band analysis is a simulation; physical loudspeaker listening is still recommended."
+}

@@ -1,0 +1,35 @@
+{
+  "name": "shalom-la-creacion",
+  "version": "5.0.0",
+  "private": true,
+  "type": "module",
+  "description": "SHALÓM — La Creación: nuevo relato completo, narrador articulado y subtítulos con énfasis sincronizado",
+  "scripts": {
+    "dev": "remotion studio src/index.ts",
+    "studio": "remotion studio src/index.ts",
+    "render": "remotion render src/index.ts LaCreacion out/la-creacion.mp4 --codec=h264 --audio-codec=aac",
+    "render:vertical": "remotion render src/index.ts LaCreacionVertical out/la-creacion-vertical.mp4 --codec=h264 --audio-codec=aac",
+    "qa:timing": "node tools/check_timing.mjs",
+    "qa:studio": "node tools/check_studio.mjs",
+    "qa:audio": "node tools/check_audio.mjs",
+    "check": "tsc --noEmit",
+    "check:core": "tsc --project tsconfig.core.json --noEmit",
+    "build:preview": "tsc --project tsconfig.core.json",
+    "test": "npm run qa:timing",
+    "audio:build": "node tools/build_sound.mjs",
+    "captions:align": "node tools/align_narration.mjs",
+    "captions:refine": "node tools/refine_transcript.mjs"
+  },
+  "dependencies": {
+    "@remotion/media": "4.0.539",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "remotion": "4.0.539"
+  },
+  "devDependencies": {
+    "@remotion/cli": "4.0.539",
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
+    "typescript": "^5.7.3"
+  }
+}

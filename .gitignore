@@ -1,0 +1,11 @@
+node_modules/
+archive/
+out/*.mp4
+out/*.wav
+out/segments/
+out/segments-impacto-v4/
+out/segments-impacto-narrado-v4/
+preview/core/
+qa/studio.log
+qa/mix-graph.txt
+.DS_Store

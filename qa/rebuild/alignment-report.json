@@ -1,0 +1,229 @@
+{
+  "durationSec": 139.650563,
+  "videoSeconds": 141.66666666666666,
+  "scriptWords": 349,
+  "recognizedWords": 349,
+  "matchedWords": 349,
+  "score": 3.2,
+  "differences": [
+    {
+      "scriptIndex": 11,
+      "script": "Biblia:",
+      "recognized": "Vibria."
+    },
+    {
+      "scriptIndex": 209,
+      "script": "aves",
+      "recognized": "sabes"
+    },
+    {
+      "scriptIndex": 271,
+      "script": "dominio",
+      "recognized": "dominios"
+    },
+    {
+      "scriptIndex": 338,
+      "script": "Edén.",
+      "recognized": "Den."
+    }
+  ],
+  "highlights": 30,
+  "pauseCorrections": [
+    {
+      "wordIndex": 18,
+      "text": "sol.",
+      "fromMs": 6600,
+      "toMs": 6510
+    },
+    {
+      "wordIndex": 67,
+      "text": "luz.",
+      "fromMs": 29870,
+      "toMs": 29590
+    },
+    {
+      "wordIndex": 111,
+      "text": "cielo.",
+      "fromMs": 45840,
+      "toMs": 45750
+    },
+    {
+      "wordIndex": 122,
+      "text": "lugar,",
+      "fromMs": 49780,
+      "toMs": 49670
+    },
+    {
+      "wordIndex": 153,
+      "text": "interesante.",
+      "fromMs": 63250,
+      "toMs": 63110
+    },
+    {
+      "wordIndex": 220,
+      "text": "multiplicarse.",
+      "fromMs": 88840,
+      "toMs": 88710
+    },
+    {
+      "wordIndex": 225,
+      "text": "día.",
+      "fromMs": 91120,
+      "toMs": 91050
+    },
+    {
+      "wordIndex": 252,
+      "text": "importante:",
+      "fromMs": 102660,
+      "toMs": 102470
+    },
+    {
+      "wordIndex": 257,
+      "text": "mujer.",
+      "fromMs": 105000,
+      "toMs": 104850
+    },
+    {
+      "wordIndex": 291,
+      "text": "manera.",
+      "fromMs": 118190,
+      "toMs": 118090
+    },
+    {
+      "wordIndex": 315,
+      "text": "obra,",
+      "fromMs": 126650,
+      "toMs": 126570
+    },
+    {
+      "wordIndex": 321,
+      "text": "día.",
+      "fromMs": 129310,
+      "toMs": 129210
+    }
+  ],
+  "scenes": [
+    {
+      "id": "hook",
+      "title": "LA LUZ\nANTES DEL SOL",
+      "reference": "Génesis 1",
+      "wordIndex": 0,
+      "start": 0,
+      "end": 336
+    },
+    {
+      "id": "origin",
+      "title": "EN EL\nPRINCIPIO",
+      "reference": "Génesis 1:1–2",
+      "wordIndex": 25,
+      "start": 336,
+      "end": 756
+    },
+    {
+      "id": "light",
+      "title": "SEA\nLA LUZ",
+      "reference": "Génesis 1:3–5",
+      "wordIndex": 59,
+      "start": 756,
+      "end": 1107
+    },
+    {
+      "id": "sky",
+      "title": "EL CIELO\nSE ABRE",
+      "reference": "Génesis 1:6–8",
+      "wordIndex": 86,
+      "start": 1107,
+      "end": 1397
+    },
+    {
+      "id": "land",
+      "title": "TIERRA\nFIRME",
+      "reference": "Génesis 1:9–10",
+      "wordIndex": 112,
+      "start": 1397,
+      "end": 1570
+    },
+    {
+      "id": "plants",
+      "title": "LA TIERRA\nFLORECE",
+      "reference": "Génesis 1:11–13",
+      "wordIndex": 128,
+      "start": 1570,
+      "end": 1853
+    },
+    {
+      "id": "cosmos",
+      "title": "SOL, LUNA\nY ESTRELLAS",
+      "reference": "Génesis 1:14–19",
+      "wordIndex": 149,
+      "start": 1853,
+      "end": 2380
+    },
+    {
+      "id": "life",
+      "title": "EL AGUA\nCOBRA VIDA",
+      "reference": "Génesis 1:20–23",
+      "wordIndex": 195,
+      "start": 2380,
+      "end": 2688
+    },
+    {
+      "id": "animals",
+      "title": "CADA UNO\nSEGÚN SU ESPECIE",
+      "reference": "Génesis 1:24–25",
+      "wordIndex": 221,
+      "start": 2688,
+      "end": 2893
+    },
+    {
+      "id": "humanity",
+      "title": "A SU\nIMAGEN",
+      "reference": "Génesis 1:26–27",
+      "wordIndex": 237,
+      "start": 2893,
+      "end": 3016
+    },
+    {
+      "id": "stewardship",
+      "title": "HOMBRE\nY MUJER",
+      "reference": "Génesis 1:27–30",
+      "wordIndex": 247,
+      "start": 3016,
+      "end": 3387
+    },
+    {
+      "id": "good",
+      "title": "BUENO EN\nGRAN MANERA",
+      "reference": "Génesis 1:31",
+      "wordIndex": 277,
+      "start": 3387,
+      "end": 3568
+    },
+    {
+      "id": "rest",
+      "title": "EL SÉPTIMO\nDÍA",
+      "reference": "Génesis 2:1–3",
+      "wordIndex": 292,
+      "start": 3568,
+      "end": 3901
+    },
+    {
+      "id": "eden",
+      "title": "LA HISTORIA\nCONTINÚA",
+      "reference": "Génesis 2",
+      "wordIndex": 322,
+      "start": 3901,
+      "end": 4250
+    }
+  ],
+  "markers": {
+    "light": 845,
+    "birds": 2506,
+    "animals": 2794,
+    "humanity": 2944,
+    "verdict": 3504,
+    "rest": 3750,
+    "eden": 4050,
+    "close": 4190
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "words": 349,
+  "captionPages": 79,
+  "emphasizedWords": 30,
+  "scenes": 14,
+  "audioSeconds": 139.650563,
+  "videoSeconds": 141.66666666666666,
+  "sourceHashMatches": true,
+  "captionOverlaps": 0,
+  "captionCoverage": "all words, once, in order",
+  "recognitionSpellingDifferences": [
+    {
+      "scriptIndex": 11,
+      "script": "Biblia:",
+      "recognized": "Vibria."
+    },
+    {
+      "scriptIndex": 209,
+      "script": "aves",
+      "recognized": "sabes"
+    },
+    {
+      "scriptIndex": 271,
+      "script": "dominio",
+      "recognized": "dominios"
+    },
+    {
+      "scriptIndex": 338,
+      "script": "Edén.",
+      "recognized": "Den."
+    }
+  ],
+  "pauseRefinements": 12,
+  "note": "These checks establish temporal consistency. Word onsets come from automatic DTW alignment, not a human phonetic annotation."
+}

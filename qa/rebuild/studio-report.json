@@ -1,0 +1,711 @@
+{
+  "checked": 90,
+  "errors": [],
+  "frames": [
+    {
+      "id": "LaCreacion",
+      "frame": 80,
+      "scene": "hook",
+      "caption": "el primer capítulo de la Biblia:",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 416,
+      "scene": "origin",
+      "caption": null,
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 836,
+      "scene": "light",
+      "caption": "«Sea la luz».",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 1187,
+      "scene": "sky",
+      "caption": "Dios hizo una expansión que separó",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 1477,
+      "scene": "land",
+      "caption": "aguas en un solo lugar,",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 1650,
+      "scene": "plants",
+      "caption": "Dios hizo que la tierra produjera",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 1933,
+      "scene": "cosmos",
+      "caption": "Es hasta el cuarto día cuando",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 2460,
+      "scene": "life",
+      "caption": "comenzaron a llenarse de seres vivos",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 2768,
+      "scene": "animals",
+      "caption": "Primero fueron creados los animales terrestres,",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 2973,
+      "scene": "humanity",
+      "caption": "Dios creó al ser humano a",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 3096,
+      "scene": "stewardship",
+      "caption": "los creó hombre y mujer.",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 3467,
+      "scene": "good",
+      "caption": "Dios declaró que era bueno en",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 3648,
+      "scene": "rest",
+      "caption": "no termina en el sexto día.",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 3981,
+      "scene": "eden",
+      "caption": "la creación.",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 4249,
+      "scene": "eden",
+      "caption": null,
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacionVertical",
+      "frame": 80,
+      "scene": "hook",
+      "caption": "el primer capítulo de la Biblia:",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacionVertical",
+      "frame": 416,
+      "scene": "origin",
+      "caption": null,
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacionVertical",
+      "frame": 836,
+      "scene": "light",
+      "caption": "«Sea la luz».",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacionVertical",
+      "frame": 1187,
+      "scene": "sky",
+      "caption": "Dios hizo una expansión que separó",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacionVertical",
+      "frame": 1477,
+      "scene": "land",
+      "caption": "aguas en un solo lugar,",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacionVertical",
+      "frame": 1650,
+      "scene": "plants",
+      "caption": "Dios hizo que la tierra produjera",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacionVertical",
+      "frame": 1933,
+      "scene": "cosmos",
+      "caption": "Es hasta el cuarto día cuando",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacionVertical",
+      "frame": 2460,
+      "scene": "life",
+      "caption": "comenzaron a llenarse de seres vivos",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacionVertical",
+      "frame": 2768,
+      "scene": "animals",
+      "caption": "Primero fueron creados los animales terrestres,",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacionVertical",
+      "frame": 2973,
+      "scene": "humanity",
+      "caption": "Dios creó al ser humano a",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacionVertical",
+      "frame": 3096,
+      "scene": "stewardship",
+      "caption": "los creó hombre y mujer.",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacionVertical",
+      "frame": 3467,
+      "scene": "good",
+      "caption": "Dios declaró que era bueno en",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacionVertical",
+      "frame": 3648,
+      "scene": "rest",
+      "caption": "no termina en el sexto día.",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacionVertical",
+      "frame": 3981,
+      "scene": "eden",
+      "caption": "la creación.",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacionVertical",
+      "frame": 4249,
+      "scene": "eden",
+      "caption": null,
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 137,
+      "scene": "hook",
+      "caption": "la luz aparece antes que el",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 139,
+      "scene": "hook",
+      "caption": "la luz aparece antes que el",
+      "highlighted": [
+        13
+      ]
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 170,
+      "scene": "hook",
+      "caption": "la luz aparece antes que el",
+      "highlighted": [
+        13
+      ]
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 172,
+      "scene": "hook",
+      "caption": "la luz aparece antes que el",
+      "highlighted": [
+        13,
+        15
+      ]
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 192,
+      "scene": "hook",
+      "caption": "la luz aparece antes que el",
+      "highlighted": [
+        13,
+        15
+      ]
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 194,
+      "scene": "hook",
+      "caption": "sol.",
+      "highlighted": [
+        18
+      ]
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 535,
+      "scene": "origin",
+      "caption": "La tierra estaba desordenada y vacía.",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 537,
+      "scene": "origin",
+      "caption": "La tierra estaba desordenada y vacía.",
+      "highlighted": [
+        42
+      ]
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 565,
+      "scene": "origin",
+      "caption": "La tierra estaba desordenada y vacía.",
+      "highlighted": [
+        42
+      ]
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 567,
+      "scene": "origin",
+      "caption": "La tierra estaba desordenada y vacía.",
+      "highlighted": [
+        42,
+        44
+      ]
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 665,
+      "scene": "origin",
+      "caption": "y el Espíritu de Dios se",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 667,
+      "scene": "origin",
+      "caption": "y el Espíritu de Dios se",
+      "highlighted": [
+        52
+      ]
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 839,
+      "scene": "light",
+      "caption": "«Sea la luz».",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 841,
+      "scene": "light",
+      "caption": "«Sea la luz».",
+      "highlighted": [
+        64
+      ]
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 882,
+      "scene": "light",
+      "caption": "Y hubo luz.",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 884,
+      "scene": "light",
+      "caption": "Y hubo luz.",
+      "highlighted": [
+        67
+      ]
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 1364,
+      "scene": "sky",
+      "caption": "A esa expansión la llamó cielo.",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 1366,
+      "scene": "sky",
+      "caption": "A esa expansión la llamó cielo.",
+      "highlighted": [
+        111
+      ]
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 1532,
+      "scene": "land",
+      "caption": "y apareció la tierra seca.",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 1534,
+      "scene": "land",
+      "caption": "y apareció la tierra seca.",
+      "highlighted": [
+        126
+      ]
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 1674,
+      "scene": "plants",
+      "caption": "Dios hizo que la tierra produjera",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 1676,
+      "scene": "plants",
+      "caption": "vegetación:",
+      "highlighted": [
+        138
+      ]
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 1945,
+      "scene": "cosmos",
+      "caption": "Es hasta el cuarto día cuando",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 1947,
+      "scene": "cosmos",
+      "caption": "Es hasta el cuarto día cuando",
+      "highlighted": [
+        157
+      ]
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 2025,
+      "scene": "cosmos",
+      "caption": "el relato menciona la creación del",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 2027,
+      "scene": "cosmos",
+      "caption": "sol,",
+      "highlighted": [
+        166
+      ]
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 2049,
+      "scene": "cosmos",
+      "caption": "la luna y las estrellas.",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 2051,
+      "scene": "cosmos",
+      "caption": "la luna y las estrellas.",
+      "highlighted": [
+        168
+      ]
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 2077,
+      "scene": "cosmos",
+      "caption": "la luna y las estrellas.",
+      "highlighted": [
+        168
+      ]
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 2079,
+      "scene": "cosmos",
+      "caption": "la luna y las estrellas.",
+      "highlighted": [
+        168,
+        171
+      ]
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 2288,
+      "scene": "cosmos",
+      "caption": "y señalar las estaciones, los días",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 2290,
+      "scene": "cosmos",
+      "caption": "y señalar las estaciones, los días",
+      "highlighted": [
+        189
+      ]
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 2487,
+      "scene": "life",
+      "caption": "comenzaron a llenarse de seres vivos",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 2489,
+      "scene": "life",
+      "caption": "comenzaron a llenarse de seres vivos",
+      "highlighted": [
+        206
+      ]
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 2513,
+      "scene": "life",
+      "caption": "y las aves aparecieron sobre la",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 2515,
+      "scene": "life",
+      "caption": "y las aves aparecieron sobre la",
+      "highlighted": [
+        209
+      ]
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 2793,
+      "scene": "animals",
+      "caption": "Primero fueron creados los animales terrestres,",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 2795,
+      "scene": "animals",
+      "caption": "Primero fueron creados los animales terrestres,",
+      "highlighted": [
+        230
+      ]
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 2986,
+      "scene": "humanity",
+      "caption": "su imagen.",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 2988,
+      "scene": "humanity",
+      "caption": "su imagen.",
+      "highlighted": [
+        246
+      ]
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 3116,
+      "scene": "stewardship",
+      "caption": "los creó hombre y mujer.",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 3118,
+      "scene": "stewardship",
+      "caption": "los creó hombre y mujer.",
+      "highlighted": [
+        255
+      ]
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 3141,
+      "scene": "stewardship",
+      "caption": "los creó hombre y mujer.",
+      "highlighted": [
+        255
+      ]
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 3143,
+      "scene": "stewardship",
+      "caption": "los creó hombre y mujer.",
+      "highlighted": [
+        255,
+        257
+      ]
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 3218,
+      "scene": "stewardship",
+      "caption": "Los bendijo y les dio la",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 3220,
+      "scene": "stewardship",
+      "caption": "responsabilidad de llenar la tierra y",
+      "highlighted": [
+        264
+      ]
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 3304,
+      "scene": "stewardship",
+      "caption": "ejercer dominio sobre los demás seres",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 3306,
+      "scene": "stewardship",
+      "caption": "ejercer dominio sobre los demás seres",
+      "highlighted": [
+        271
+      ]
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 3503,
+      "scene": "good",
+      "caption": "Dios declaró que era bueno en",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 3505,
+      "scene": "good",
+      "caption": "Dios declaró que era bueno en",
+      "highlighted": [
+        288
+      ]
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 3536,
+      "scene": "good",
+      "caption": "gran manera.",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 3538,
+      "scene": "good",
+      "caption": "gran manera.",
+      "highlighted": [
+        291
+      ]
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 3765,
+      "scene": "rest",
+      "caption": "Dios descansó de su obra,",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 3767,
+      "scene": "rest",
+      "caption": "Dios descansó de su obra,",
+      "highlighted": [
+        312
+      ]
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 3844,
+      "scene": "rest",
+      "caption": "y bendijo y santificó aquel día.",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 3846,
+      "scene": "rest",
+      "caption": "y bendijo y santificó aquel día.",
+      "highlighted": [
+        319
+      ]
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 4065,
+      "scene": "eden",
+      "caption": "huerto de Edén.",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 4067,
+      "scene": "eden",
+      "caption": "huerto de Edén.",
+      "highlighted": [
+        338
+      ]
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 4158,
+      "scene": "eden",
+      "caption": "en el siguiente capítulo.",
+      "highlighted": []
+    },
+    {
+      "id": "LaCreacion",
+      "frame": 4160,
+      "scene": "eden",
+      "caption": "en el siguiente capítulo.",
+      "highlighted": [
+        347
+      ]
+    }
+  ]
+}
