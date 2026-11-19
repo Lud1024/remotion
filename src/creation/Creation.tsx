@@ -20,7 +20,24 @@ const World:React.FC<{scene:Scene}>=({scene})=>{
  const local=useCurrentFrame();
  const {width,height}=useVideoConfig();
  const html=useMemo(()=>renderWorld(local+scene.start,scene,width,height),[local,scene,width,height]);
- return <div style={{position:'absolute',inset:0}} dangerouslySetInnerHTML={{__html:html}}/>;
+ const index=STORY.scenes.findIndex(s=>s.id===scene.id);
+ const previous=index>0?STORY.scenes[index-1]:null;
+ // Overlay a held frame from the preceding scene instead of flashing empty scenery at a cut.
+ // No Sequence timing changes: narration and captions retain their original frame alignment.
+ const transitionFrames=scene.id==='light'||scene.id==='humanity'?20:16;
+ const previousHtml=useMemo(()=>{
+  if(!previous||local>=transitionFrames)return null;
+  return renderWorld(previous.end-1,previous,width,height);
+ },[previous,local,width,height,transitionFrames]);
+ const progress=smooth(local/transitionFrames);
+ return <>
+  <div style={{position:'absolute',inset:0}} dangerouslySetInnerHTML={{__html:html}}/>
+  {previousHtml&&<div data-scene-transition="true" style={{
+   position:'absolute',inset:0,pointerEvents:'none',
+   opacity:1-progress,
+   scale:1+progress*.008,
+  }} dangerouslySetInnerHTML={{__html:previousHtml}}/>}
+ </>;
 };
 
 function actorScript(width:number,height:number):CharacterScript {
