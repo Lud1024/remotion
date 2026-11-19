@@ -1,0 +1,56 @@
+name: Remotion visual quality
+
+on:
+  pull_request:
+  push:
+    branches:
+      - feat/premium-organic-motion-v1
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Typecheck full project
+        run: npm run check
+      - name: Typecheck motion core
+        run: npm run check:core
+      - name: Verify narration alignment
+        run: npm run qa:timing
+      - name: Test scene visuals and continuous camera
+        run: npm run qa:visual
+      - name: Test Remotion Studio in both formats
+        run: |
+          npx remotion studio src/index.ts --no-open --port=3000 > studio.log 2>&1 &
+          STUDIO_PID=$!
+          trap 'kill "$STUDIO_PID" || true' EXIT
+          for i in $(seq 1 90); do
+            if curl -fsS "http://localhost:3000/LaCreacion" > /dev/null; then
+              break
+            fi
+            sleep 2
+          done
+          npm run qa:studio
+      - name: Upload visual inspection captures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: remotion-visual-qa
+          if-no-files-found: ignore
+          path: |
+            qa/rebuild/studio/
+            qa/rebuild/studio-report.json
+            qa/rebuild/timing-check.json
+            studio.log
