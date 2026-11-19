@@ -1,5 +1,6 @@
 import {clamp,f,hash,lerp,smooth} from '../core/util';
 import data from './alignment.json';
+import {renderAir,renderDepthBackdrop,renderForeground,sceneCamera} from './artDirection';
 
 export type Scene=typeof data.scenes[number];
 const TAU=Math.PI*2;
@@ -30,15 +31,25 @@ function waterSurface(y:number,rx:number,ry:number,t:number,dark=false) {
 }
 function plant(x:number,y:number,scale:number,t:number,seed:number) {
  const growth=smooth((t-seed*9)/65),height=150*growth;
+ const wind=Math.sin(t*.012+seed*1.9)*1.3+Math.sin(t*.021+seed*.6)*.45;
  let leaves='';
  for(let i=0;i<6;i++) {
   const side=i%2?1:-1,sy=-height*(.25+i*.12),length=(30+i*3)*growth;
-  const bend=Math.sin(t*.025+seed+i)*3;
-  leaves+=`<path d="M0 ${f(sy)}Q${f(side*length)} ${f(sy-length*.7+bend)} ${f(side*length*1.2)} ${f(sy-length*.3)}Q${f(side*length*.6)} ${f(sy+8)} 0 ${f(sy)}Z" fill="url(#${i%2?'c-foliage':'c-foliageShade'})"/><path d="M0 ${f(sy)}L${f(side*length)} ${f(sy-length*.27)}" stroke="#c4d9a2" stroke-width="1" opacity=".5"/>`;
+  const lag=Math.sin(t*.017+seed*1.4+i*1.3)*2.4*growth;
+  const bend=Math.sin(t*.012+seed+i*.7)*2;
+  leaves+=`<g transform="translate(0 ${f(sy)}) rotate(${f(lag)})">
+   <path d="M0 0Q${f(side*length*.48)} ${f(-length*.57+bend)} ${f(side*length*1.2)} ${f(-length*.3)}Q${f(side*length*.67)} 8 0 0Z" fill="url(#${i%2?'c-foliage':'c-foliageShade'})"/>
+   <path d="M0 0Q${f(side*length*.54)} ${f(-length*.25)} ${f(side*length)} ${f(-length*.28)}" fill="none" stroke="#d9e8b3" stroke-width="1.15" opacity=".53"/>
+  </g>`;
  }
- // Wind is deliberately subtle and off-phase per plant, instead of synchronised rigid movement.
- const sway=Math.sin(t*.012+seed*1.9)*1.1+Math.sin(t*.023+seed*.6)*.35;
- return `<g transform="translate(${x} ${y}) scale(${scale}) rotate(${f(sway)})"><path d="M0 0Q${Math.sin(t*.02+seed)*7} ${f(-height*.5)} 0 ${f(-height)}" stroke="#a1bc83" stroke-width="4" fill="none"/>${leaves}</g>`;
+ return `<g data-organic="plant" transform="translate(${x} ${y}) scale(${f(scale)})">
+  <ellipse cy="5" rx="19" ry="4" fill="#0c2e30" opacity=".2"/>
+  <g transform="rotate(${f(wind)})">
+   <path d="M0 0Q${f(wind*1.5)} ${f(-height*.5)} 0 ${f(-height)}" stroke="#4f7e5c" stroke-width="5" stroke-linecap="round" fill="none"/>
+   <path d="M-1 0Q${f(wind*.8)} ${f(-height*.5)} 0 ${f(-height)}" stroke="#c5d99d" stroke-width="1.2" opacity=".8" fill="none"/>
+   ${leaves}
+  </g>
+ </g>`;
 }
 function fruitTree(x:number,y:number,size:number,t:number,growth:number) {
  const sway=Math.sin(t*.013+x)*1.7;
@@ -55,20 +66,74 @@ function bird(x:number,y:number,size:number,t:number,seed:number) {
  const flap=Math.sin(t*.17+seed),wing=24+flap*25;
  return `<g transform="translate(${f(x)} ${f(y)}) scale(${size})"><path d="M0 2Q-22 ${f(-wing)} -62 ${f(-wing*.8)}Q-34 ${f(10-wing*.25)} -8 12Q0 23 8 12Q34 ${f(10-wing*.25)} 62 ${f(-wing*.8)}Q22 ${f(-wing)} 0 2Z" fill="#e9e6d1"/><path d="M0 3l8 15l-8 -3l-8 3Z" fill="#8ba6a7"/><path d="M0 -2l5 7h-10Z" fill="#e0b46a"/></g>`;
 }
+/** Jointed limbs move in place: weight shifts, never a treadmill-like foot slide. */
+function animalLeg(hipX:number,t:number,seed:number,foreground:boolean) {
+ const hip=Math.sin(t*.012+seed*1.8)*(foreground?1.8:1.05);
+ const knee=Math.sin(t*.015+seed*2.4+1.3)*1.4;
+ const fill=foreground?'#ac9173':'#796f67';
+ return `<g transform="translate(${hipX} -96) rotate(${f(hip)})" opacity="${foreground?1:.73}">
+  <path d="M0 0 Q${foreground?-5:3} 22 0 48" fill="none" stroke="${fill}" stroke-width="${foreground?17:14}" stroke-linecap="round"/>
+  <g transform="translate(0 48) rotate(${f(knee)})">
+   <path d="M0 0 Q${foreground?3:-3} 25 0 46" fill="none" stroke="${fill}" stroke-width="${foreground?13:11}" stroke-linecap="round"/>
+   <path d="M-7 44Q7 42 17 47Q18 52 12 53H-9Z" fill="${foreground?'#5f625b':'#505c58'}"/>
+  </g>
+  <circle cy="48" r="5" fill="#c8b18f" opacity=".28"/>
+ </g>`;
+}
 function animal(x:number,y:number,size:number,t:number,seed:number) {
- const step=Math.sin(t*.09+seed)*11;
- return `<g transform="translate(${x} ${y}) scale(${size})"><path d="M-72 -92L-72 -14l-8 10h22l8 -82 M44 -89l3 74l-7 11h23l-2 -85" fill="#5e5b5b"/><path d="M-88 -133Q-26 -173 62 -126L74 -91Q24 -53 -71 -91Z" fill="url(#c-animal)"/><path d="M52 -113Q69 -166 73 -209L98 -203L99 -128L80 -90Z" fill="#ab8e70"/><path d="M71 -211Q99 -232 120 -215L138 -199L129 -188L90 -190Z" fill="#bda27e"/><path d="M86 -217l-14 -22l1 26 M105 -219l8 -25l8 26" fill="#cdb591"/><circle cx="114" cy="-208" r="3.5" fill="#172b36"/><path d="M-50 -86L${f(-45+step)} -7h20L-30 -92 M11 -86L${f(16-step)} -7h20L31 -92" fill="#c4a47b"/><path d="M-85 -125Q-109 -154 -114 -143" fill="none" stroke="#746650" stroke-width="6" stroke-linecap="round"/></g>`;
+ const breathe=Math.sin(t*.019+seed*2)*1.6;
+ const weight=Math.sin(t*.008+seed*1.6)*1.1;
+ const neck=Math.sin(t*.012+seed*1.3)*1.9;
+ const tail=Math.sin(t*.028+seed*2.4)*7;
+ const blink=Math.max(0,1-Math.abs(((t+seed*81)%127)-64)/3);
+ return `<g data-organic="animal" transform="translate(${f(x)} ${f(y)}) scale(${f(size)})">
+  <ellipse cy="8" rx="104" ry="15" fill="#061a21" opacity=".28"/>
+  ${animalLeg(-58,t,seed+.5,false)}${animalLeg(42,t+16,seed+1.2,false)}
+  <g transform="translate(0 ${f(breathe)}) rotate(${f(weight*.45)})">
+   <path d="M-84 -127Q-110 ${f(-147+tail*.3)} ${f(-129+tail)} ${f(-151+tail)}" fill="none" stroke="#998165" stroke-width="6" stroke-linecap="round"/>
+   <path d="M-88 -129Q-31 -169 61 -125L74 -91Q25 -56 -72 -90Z" fill="url(#c-animal)" stroke="#897b68" stroke-width="1.8"/>
+   <path d="M-77 -125Q-19 -146 53 -119" stroke="#f4dbb5" stroke-width="3.6" fill="none" opacity=".55" stroke-linecap="round"/>
+   <path d="M-48 -103Q8 -73 59 -103" stroke="#695f5c" stroke-width="1.8" fill="none" opacity=".28"/>
+   <g transform="translate(58 -111) rotate(${f(neck)})">
+    <path d="M-8 0Q12 -33 16 -93L39 -89L41 -12L16 18Z" fill="#af9274" stroke="#857361" stroke-width="1.7"/>
+    <path d="M15 -89Q43 -108 58 -89L79 -76L70 -63L39 -64L22 -73Z" fill="#cbb08c"/>
+    <path d="M30 -93l-9 -24l0 27 M46 -94l9 -24l7 25" fill="#d8c2a0"/>
+    <path d="M24 -91Q38 -98 50 -86" stroke="#f3ddba" stroke-width="2" opacity=".75" fill="none"/>
+    <ellipse cx="58" cy="-85" rx="4" ry="${f(3.1*(1-blink)+.4)}" fill="#203039"/>
+    <path d="M68 -71q6 2 11 0" stroke="#63584e" stroke-width="1.4" fill="none"/>
+   </g>
+  </g>
+  ${animalLeg(-49,t+10,seed+2,true)}${animalLeg(40,t+34,seed+3,true)}
+ </g>`;
 }
 function human(x:number,y:number,size:number,feminine:boolean,t:number) {
- const sway=Math.sin(t*.012+(feminine?1:0))*2;
- return `<g transform="translate(${x} ${y}) scale(${size}) rotate(${f(sway)})"><ellipse cx="0" cy="-153" rx="24" ry="29" fill="url(#c-human)"/><path d="M-22 -162Q-18 -192 6 -185Q28 -181 24 -149L17 -162Q-7 -153 -22 -162Z" fill="#213749"/>
- <path d="M-11 -128h22l4 18h-30Z" fill="#d8b993"/>
- <path d="M-25 -111Q0 -126 25 -111L${feminine?46:28} -25Q0 -13 ${feminine?-46:-28} -25Z" fill="${feminine?'#e2c79f':'#a3c3ba'}"/>
- <path d="M-28 -102Q-49 -73 -42 -37 M28 -102Q49 -73 42 -37" fill="none" stroke="${feminine?'#d3b489':'#83aaa6'}" stroke-width="13" stroke-linecap="round"/>
- <path d="M-14 -22l-1 52 M14 -22l1 52" stroke="#253c4a" stroke-width="16" stroke-linecap="round"/>
- <path d="M-24 -105Q-6 -115 12 -109" fill="none" stroke="#fff2d2" stroke-width="2" opacity=".5"/></g>`;
+ const seed=feminine?7:3;
+ const breath=Math.sin(t*.018+seed)*1.6;
+ const head=Math.sin(t*.012+seed*1.2)*1.3;
+ const shoulderL=Math.sin(t*.013+seed)*2.4;
+ const shoulderR=Math.sin(t*.012+seed+1.5)*2.1;
+ const dress=feminine?'#e2c79f':'#a3c3ba';
+ const sleeve=feminine?'#d3b489':'#83aaa6';
+ return `<g data-organic="human" transform="translate(${f(x)} ${f(y)}) scale(${f(size)})">
+  <ellipse cy="35" rx="29" ry="6" fill="#091d29" opacity=".22"/>
+  <path d="M-14 -23L-16 30 M14 -23L16 30" stroke="#253c4a" stroke-width="15" stroke-linecap="round"/>
+  <path d="M-24 29h21 M4 29h21" stroke="#c5ae88" stroke-width="5" stroke-linecap="round"/>
+  <g transform="translate(0 ${f(breath)})">
+   <path d="M-25 -111Q0 -124 25 -111L${feminine?46:28} -25Q0 -12 ${feminine?-46:-28} -25Z" fill="${dress}"/>
+   <path d="M-21 -101Q-37 -75 -40 -42" fill="none" stroke="${sleeve}" stroke-width="12" stroke-linecap="round" transform="rotate(${f(shoulderL)} -21 -101)"/>
+   <path d="M21 -101Q38 -75 39 -41" fill="none" stroke="${sleeve}" stroke-width="12" stroke-linecap="round" transform="rotate(${f(shoulderR)} 21 -101)"/>
+   <path d="M-18 -110Q0 -120 19 -111" fill="none" stroke="#fff2d2" stroke-width="2.5" opacity=".45"/>
+   <g transform="translate(0 -153) rotate(${f(head)})">
+    <path d="M-11 23h22l4 20h-30Z" fill="#d8b993"/>
+    <ellipse rx="24" ry="29" fill="url(#c-human)" stroke="#987b68" stroke-width=".9"/>
+    <path d="M-22 -10Q-18 -39 6 -33Q28 -29 24 4L17 -10Q-7 -1 -22 -10Z" fill="#213749"/>
+    <path d="M-13 -1h6 M8 -1h6" stroke="#4b4d50" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M-4 13Q0 16 4 13" stroke="#906d63" stroke-width="1.2" fill="none"/>
+    <ellipse cx="-13" cy="9" rx="5" ry="3" fill="#da9f8b" opacity=".16"/>
+   </g>
+  </g>
+ </g>`;
 }
-
 export const THEMES:Record<string,{top:string;bottom:string;accent:string}>={
  hook:{top:'#07101e',bottom:'#123244',accent:'#efbe71'},origin:{top:'#030810',bottom:'#102c3c',accent:'#9ac7d5'},
  light:{top:'#14283d',bottom:'#bc9766',accent:'#ffe9b2'},sky:{top:'#0d364c',bottom:'#418d98',accent:'#d0eee5'},
@@ -81,17 +146,15 @@ export const THEMES:Record<string,{top:string;bottom:string;accent:string}>={
 
 /** New visual system. None of the former seven SVG scenes is used here. */
 export function renderWorld(frame:number,scene:Scene,width:number,height:number) {
- const vertical=height>width,t=frame-scene.start,p=clamp(t/(scene.end-scene.start));
+ const vertical=height>width,t=frame-scene.start;
  const theme=THEMES[scene.id],unit=Math.min(width,height)/1080;
  const reframe=vertical||scene.id==='eden'?0:smooth((t-(scene.id==='hook'?220:130))/35);
  const centerX=width*(vertical?.5:lerp(.68,.5,reframe)),centerY=height*(vertical?.36:.43);
  const scale=(vertical?1.05:1)*unit*(1+reframe*.18);
- // Keep the camera continuous: resetting a 120-frame zoom created a visible snap every 4 seconds.
- // Frame-derived movement remains deterministic for Remotion's out-of-order rendering.
- const shot=Math.floor(t/120); // shot marker retained for QA/inspection
- const push=1+.035*smooth(p);
- const cameraDrift=Math.sin(t*.006)*.75+Math.sin(t*.002+.8)*.25;
- const cx=centerX+cameraDrift*14*unit,cy=centerY+Math.sin(t*.003)*8*unit;
+ const shot=Math.floor(t/120); // Metadata only: never use hard cuts to animate the camera.
+ const camera=sceneCamera(t,scene.end-scene.start,scene.id);
+ const push=camera.scale;
+ const cx=centerX+camera.x*unit,cy=centerY+camera.y*unit;
  const previousScene=data.scenes[Math.max(0,data.scenes.findIndex(s=>s.id===scene.id)-1)];
  const previousTheme=THEMES[previousScene.id],transition=smooth(t/12);
  const defs=`<defs>${grad('c-bg',[blendColor(previousTheme.top,theme.top,transition),blendColor(previousTheme.bottom,theme.bottom,transition)])}${radial('c-halo',theme.accent,.24)}${radial('c-flare','#fff2c7',.9)}${grad('c-sun',['#fff9d9','#f7c46e','#ae6e3f'])}${grad('c-moon',['#eef0da','#a3b2c5','#4e607d'])}${grad('c-water',['#7bb8b6','#195b70','#0b354c'])}${grad('c-land',['#b4bf94','#6d9c80','#305d61'])}${grad('c-animal',['#e0c299','#ab8f6e','#675e59'])}${grad('c-human',['#efdab8','#cfad8b','#8c7b6f'])}</defs>`;
@@ -151,15 +214,18 @@ export function renderWorld(frame:number,scene:Scene,width:number,height:number)
    ${birdsNow?Array.from({length:9},(_,i)=>bird(-330+i*85+Math.sin(t*.01)*30,-140-Math.sin(i*.9)*80,.5+hash(i)*.4,t,i)).join(''):''}
    <path d="M-420 -20Q0 -60 420 -20" stroke="#b0ddd0" stroke-width="2" opacity=".5" fill="none"/>`;
  } else if(scene.id==='animals') {
-  objects=`<ellipse cy="205" rx="490" ry="125" fill="#405d58"/>
-   <path d="M-460 190Q-200 60 0 175T460 190" fill="#8fa384"/>
-   ${animal(-160,185,1.2,t,0)}${animal(170,180,.82,t+20,1)}${animal(310,205,.55,t+50,2)}
+  objects=`<path d="M-520 270Q-240 85 0 175T530 265V370H-520Z" fill="url(#c-land)"/>
+   <path d="M-450 194Q-240 123 -30 187T450 213" fill="none" stroke="#d9c9a2" stroke-width="2" opacity=".38"/>
+   <ellipse cx="-160" cy="193" rx="136" ry="20" fill="#0d3035" opacity=".25"/>
+   <ellipse cx="170" cy="188" rx="88" ry="12" fill="#0d3035" opacity=".22"/>
+   ${animal(-160,185,1.2,t,0)}${animal(170,180,.82,t,1)}${animal(310,205,.55,t,2)}
    ${plant(-350,205,.65,t+300,7)}${plant(390,200,.8,t+300,8)}`;
  } else if(scene.id==='humanity'||scene.id==='stewardship') {
-  objects=`<circle cy="-40" r="290" fill="url(#c-halo)"/><ellipse cy="235" rx="370" ry="85" fill="#385b5b"/>
-   <path d="M-300 210Q0 105 300 210" fill="#a8b79b"/>
+  objects=`<circle cy="-40" r="290" fill="url(#c-halo)" opacity=".8"/>
+   <path d="M-440 310Q-200 170 0 190T440 292V370H-440Z" fill="url(#c-land)"/>
+   <path d="M-310 219Q0 130 305 220" stroke="#e4d0aa" stroke-width="2" fill="none" opacity=".45"/>
    ${human(-85,190,1.75,false,t)}${human(90,190,1.75,true,t)}
-   <ellipse cy="25" rx="340" ry="250" stroke="#dac59b" stroke-width="1" opacity=".3" fill="none" stroke-dasharray="4 9"/>
+   <ellipse cy="25" rx="340" ry="250" stroke="#dac59b" stroke-width="1" opacity=".22" fill="none" stroke-dasharray="4 9"/>
    ${scene.id==='stewardship'?`${plant(-300,225,.9,t+200,1)}${plant(300,225,1.1,t+200,2)}`:''}`;
  } else if(scene.id==='good') {
   objects=`<circle r="310" fill="url(#c-flare)" opacity=".6"/><ellipse cy="180" rx="390" ry="85" fill="#415e63"/>
@@ -180,9 +246,15 @@ export function renderWorld(frame:number,scene:Scene,width:number,height:number)
    <path d="M-280 275H280" stroke="#849f94" stroke-width="2"/>`;
  }
  return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" data-world="${scene.id}" data-shot="${shot}">
- ${defs}${materialDefs}<rect width="${width}" height="${height}" fill="url(#c-bg)"/>
- <ellipse cx="${cx}" cy="${cy}" rx="${width*.58}" ry="${height*.55}" fill="url(#c-halo)"/>
+ ${defs}${materialDefs}
+ <defs><radialGradient id="c-vignette"><stop offset=".3" stop-color="#020b15" stop-opacity="0"/><stop offset="1" stop-color="#020b15" stop-opacity=".55"/></radialGradient></defs>
+ <rect width="${width}" height="${height}" fill="url(#c-bg)"/>
+ ${renderDepthBackdrop(scene.id,width,height,frame,theme)}
+ <ellipse cx="${f(cx)}" cy="${f(cy)}" rx="${f(width*.58)}" ry="${f(height*.55)}" fill="url(#c-halo)" opacity=".8"/>
  <g opacity="${f(scene.start===0?1:transition)}" transform="translate(${f(cx)} ${f(cy)}) scale(${f(scale*push)}) rotate(${scene.id==='cosmos'?f(Math.sin(t*.001)*3):0})">${objects}</g>
+ ${renderAir(scene.id,width,height,frame,theme)}
+ ${renderForeground(scene.id,width,height,frame,theme)}
  <rect width="${width}" height="${height}" fill="url(#c-bottomShade)"/>
+ <rect width="${width}" height="${height}" fill="url(#c-vignette)" opacity=".42"/>
  </svg>`;
 }
