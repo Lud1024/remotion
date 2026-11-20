@@ -18,7 +18,8 @@
     "test": "npm run qa:timing",
     "audio:build": "node tools/build_sound.mjs",
     "captions:align": "node tools/align_narration.mjs",
-    "captions:refine": "node tools/refine_transcript.mjs"
+    "captions:refine": "node tools/refine_transcript.mjs",
+    "qa:visual": "node tools/check_visual_motion.mjs"
   },
   "dependencies": {
     "@remotion/media": "4.0.539",
