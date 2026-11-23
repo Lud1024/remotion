@@ -23,7 +23,18 @@ try {
      await new Promise(r=>setTimeout(r,100));
      const svg=root.querySelector('[data-world]'),r=root.getBoundingClientRect(),subs=root.querySelector('[data-subtitles]'),s=subs?.getBoundingClientRect();
      const all=[...root.querySelectorAll('svg')];
-     return {frame:Number(root.getAttribute('data-creation-frame')),scene:svg?.getAttribute('data-world'),cast:[...root.querySelectorAll('[data-character-design]')].map(n=>n.getAttribute('data-character-design')),castLayers:[...root.querySelectorAll('[data-character-cast]')].map(n=>n.getAttribute('data-character-cast')),hair:[...root.querySelectorAll('[data-part="hair-front"]')].length,eyes:[...root.querySelectorAll('[data-part="eye-left"], [data-part="eye-right"]')].length,invalid:all.some(s=>/NaN|undefined|Infinity/.test(s.outerHTML)),xmlError:all.some(s=>!!new DOMParser().parseFromString(s.outerHTML,'image/svg+xml').querySelector('parsererror')),subtitle:subs?.textContent??null,highlighted:[...root.querySelectorAll('[data-emphasized="true"]')].map(n=>Number(n.getAttribute('data-word'))),branding:root.textContent.includes('SHALÓM'),ending:!!root.querySelector('[data-ending]'),subtitleHeight:s?s.height/(r.height/Number(svg?.getAttribute('height'))):0,rect:{x:r.x,y:r.y,width:r.width,height:r.height}};
+     const headContours=[...root.querySelectorAll('[data-head-design]')].map(head=>{
+      const face=head.querySelector('[data-part="head"]');
+      const hair=head.querySelector('[data-part="hair-front"]');
+      const eye=head.querySelector('[data-part="eye-left"]');
+      const forehead=face?.getBBox();
+      const fringe=hair?.getBBox();
+      const eyes=eye?.getBBox();
+      return {kind:head.getAttribute('data-head-design'),order:face&&hair?!!(face.compareDocumentPosition(hair)&Node.DOCUMENT_POSITION_FOLLOWING):false,
+       integrated:!!(forehead&&fringe&&eyes&&fringe.y<forehead.y-7&&fringe.y+fringe.height<eyes.y-2),
+       hairFront:!!hair,skull:!!face};
+     });
+     return {headContours,frame:Number(root.getAttribute('data-creation-frame')),scene:svg?.getAttribute('data-world'),cast:[...root.querySelectorAll('[data-character-design]')].map(n=>n.getAttribute('data-character-design')),castLayers:[...root.querySelectorAll('[data-character-cast]')].map(n=>n.getAttribute('data-character-cast')),hair:[...root.querySelectorAll('[data-part="hair-front"]')].length,eyes:[...root.querySelectorAll('[data-part="eye-left"], [data-part="eye-right"]')].length,invalid:all.some(s=>/NaN|undefined|Infinity/.test(s.outerHTML)),xmlError:all.some(s=>!!new DOMParser().parseFromString(s.outerHTML,'image/svg+xml').querySelector('parsererror')),subtitle:subs?.textContent??null,highlighted:[...root.querySelectorAll('[data-emphasized="true"]')].map(n=>Number(n.getAttribute('data-word'))),branding:root.textContent.includes('SHALÓM'),ending:!!root.querySelector('[data-ending]'),subtitleHeight:s?s.height/(r.height/Number(svg?.getAttribute('height'))):0,rect:{x:r.x,y:r.y,width:r.width,height:r.height}};
     }
     await new Promise(r=>setTimeout(r,80));
    }
@@ -47,6 +58,10 @@ try {
    assert.deepEqual(state.castLayers,[scene.id]);
    assert.equal(state.hair,2,'Separate front hair layers expected');
    assert.equal(state.eyes,4,'Each human needs two independent eyes');
+   assert.equal(state.headContours.length,2,'Both characters should have anatomical head layers');
+   assert.deepEqual(state.headContours.map(h=>h.kind),['adam','eve']);
+   assert.ok(state.headContours.every(h=>h.order&&h.integrated&&h.hairFront&&h.skull),
+    'Hair must extend over the crown, integrate with the forehead and remain in front of the skull');
   }
   if(capture){const {value}=await page._client().send('Page.captureScreenshot',{format:'png',clip:{...state.rect,scale:1},captureBeyondViewport:true});fs.writeFileSync(`qa/rebuild/studio/${id}-${scene.id}-${frame}.png`,Buffer.from(value.data,'base64'));}
   report.push({id,frame,scene:scene.id,caption:state.subtitle,highlighted:state.highlighted});
