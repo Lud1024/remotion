@@ -42,7 +42,8 @@ export const CharacterHairBack:React.FC<CharacterHeadProps>=({kind,frame,seed})=
   <path d="M-29 -33C-33 -56 -15 -67 2 -65C-16 -58 -26 -42 -25 -17
    Q-28 38 -29 75Q-23 83 -19 81L-15 15Z" fill={HAIR.base}/>
   <path d="M20 -56Q35 -47 31 -24Q29 31 34 77Q30 83 25 82L20 18Z" fill={HAIR.base}/>
-  <path d="M-30 7Q-29 49 -26 69M29 2Q29 48 31 68" stroke={HAIR.lit} opacity=".38" strokeWidth="1.65" fill="none"/>
+  <path d="M-30 2C-28 24 -29 47 -26 68M29 -1C30 24 28 48 31 67" stroke={HAIR.lit} opacity=".28" strokeWidth="1.65" fill="none" strokeLinecap="round"/>
+  <path d="M-34 55Q-35 73 -27 83Q-20 83 -19 78M33 56Q37 75 29 84Q24 87 19 82" stroke={HAIR.base} strokeWidth="2.5" opacity=".48" fill="none"/>
  </g>;
 };
 
@@ -56,13 +57,13 @@ const AdamFringe:React.FC<{frame:number;seed:number}>=({frame,seed})=>{
   <path d="M-26 -30C-27 -47 -15 -59 -1 -60C12 -63 23 -55 27 -43
    Q20 -47 13 -44C3 -45 -2 -37 -9 -36Q-20 -36 -26 -30Z" fill={HAIR.base}/>
   <g data-part="fringe-sweep" transform={'rotate('+lean+' -3 -39)'}>
-   <path d="M-26 -31Q-23 -47 -10 -53Q2 -56 8 -51
-    C3 -43 -6 -34 -17 -29L-24 -25Z" fill={HAIR.lit} opacity=".68"/>
-   <path d="M-9 -49Q4 -56 16 -48Q19 -43 21 -38
-    Q12 -40 8 -34Q1 -30 -8 -30Q-1 -38 -9 -49Z" fill={HAIR.base}/>
-   <path d="M12 -47Q24 -45 27 -32L24 -22Q21 -31 14 -33Z" fill={HAIR.lit} opacity=".6"/>
+   {/* Flowing tapered highlights echo the direction of the hair, never a pasted-on polygon. */}
+   <path d="M-22 -34C-21 -45 -14 -52 -4 -55C-11 -48 -14 -41 -18 -36Q-21 -33 -22 -34Z" fill={HAIR.lit} opacity=".43"/>
+   <path d="M-11 -47C0 -54 12 -51 19 -43C12 -46 6 -45 0 -41Q-7 -37 -10 -33Q-5 -41 -11 -47Z" fill={HAIR.base} opacity=".92"/>
+   <path d="M8 -49C18 -49 24 -42 26 -33C22 -39 17 -42 11 -43Z" fill={HAIR.lit} opacity=".36"/>
+   <path d="M-18 -34C-12 -42 -5 -44 2 -45M3 -47C11 -49 17 -46 21 -42" fill="none" stroke="#a0a4a0" strokeWidth="1.05" strokeLinecap="round" opacity=".32"/>
   </g>
-  <path d="M-24 -27Q-13 -39 -3 -39M2 -44Q12 -49 20 -42" stroke="#909296" strokeWidth="1.3" opacity=".28" fill="none"/>
+  <path d="M-22 -29C-12 -33 -6 -35 1 -34M7 -32C14 -34 19 -34 24 -29" stroke={HAIR.base} strokeWidth="1.1" opacity=".55" fill="none"/>
   <g data-part="temples">
    <path d="M-27 -27Q-30 -20 -27 -11L-23 -9L-22 -23Z" fill={HAIR.shadow}/>
    <path d="M27 -25Q30 -20 26 -11L22 -10L23 -22Z" fill={HAIR.shadow}/>
@@ -82,14 +83,12 @@ const EveFringe:React.FC<{frame:number;seed:number}>=({frame,seed})=>{
   <path d="M0 -63C18 -66 30 -52 31 -38Q29 -30 25 -25
    C17 -29 10 -32 7 -35Q3 -41 0 -63Z" fill={HAIR.base}/>
   <g data-part="fringe-sweep" transform={'rotate('+sway+' -7 -40)'}>
-   <path d="M-6 -61Q-19 -58 -25 -46Q-29 -38 -26 -28
-    C-19 -32 -12 -38 -9 -43Q-7 -50 -6 -61Z" fill={HAIR.lit} opacity=".56"/>
-   <path d="M-5 -56Q-7 -44 -15 -37Q-19 -32 -25 -29
-    Q-14 -32 -7 -37Q1 -44 2 -50Z" fill={HAIR.base}/>
-   <path d="M2 -57Q7 -45 13 -39Q20 -35 26 -29
-    Q18 -34 15 -43Q10 -51 2 -57Z" fill={HAIR.lit} opacity=".45"/>
+   <path d="M-9 -60C-20 -56 -26 -47 -27 -34C-23 -43 -18 -49 -11 -53Q-9 -56 -9 -60Z" fill={HAIR.lit} opacity=".36"/>
+   <path d="M-5 -56C-8 -47 -14 -36 -24 -29C-16 -33 -10 -38 -6 -46Q-4 -52 -5 -56Z" fill={HAIR.base} opacity=".8"/>
+   <path d="M5 -59C16 -55 24 -46 29 -34C24 -41 18 -47 11 -50Q8 -54 5 -59Z" fill={HAIR.lit} opacity=".33"/>
+   <path d="M-19 -43C-16 -49 -11 -53 -6 -55M12 -52C18 -49 23 -44 26 -39" fill="none" stroke="#a0a1a2" strokeWidth="1.1" strokeLinecap="round" opacity=".29"/>
   </g>
-  <path d="M-23 -34Q-18 -50 -6 -55M8 -56Q21 -53 27 -39" stroke="#a4a3a1" strokeWidth="1.35" opacity=".24" fill="none"/>
+  <path d="M-27 -23C-24 -31 -17 -36 -13 -39M23 -24C22 -32 18 -36 14 -40" stroke="#7b8082" strokeWidth="1.1" opacity=".36" fill="none"/>
  </g>;
 };
 
@@ -100,12 +99,12 @@ function SideLocks({kind,frame,seed}:{kind:CharacterKind;frame:number;seed:numbe
   <g data-part="hair-side-lock-left" transform={'rotate('+left+' -26 -20)'}>
    <path d="M-28 -27Q-35 -12 -33 10Q-34 25 -28 39
     Q-21 46 -19 42Q-26 20 -23 8Q-20 -12 -22 -23Z" fill={HAIR.shadow}/>
-   <path d="M-28 -16Q-31 10 -28 29" fill="none" stroke={HAIR.lit} strokeWidth="2" opacity=".43"/>
+   <path d="M-28 -16C-31 -4 -32 16 -28 29" fill="none" stroke={HAIR.lit} strokeWidth="1.7" opacity=".34" strokeLinecap="round"/>
   </g>
   <g data-part="hair-side-lock-right" transform={'rotate('+right+' 28 -20)'}>
    <path d="M28 -26Q36 -11 33 13Q35 28 28 40
     Q21 45 19 41Q26 19 23 8Q20 -12 22 -23Z" fill={HAIR.shadow}/>
-   <path d="M28 -16Q31 10 28 27" fill="none" stroke={HAIR.lit} strokeWidth="2" opacity=".43"/>
+   <path d="M28 -16C31 -4 32 14 28 27" fill="none" stroke={HAIR.lit} strokeWidth="1.7" opacity=".33" strokeLinecap="round"/>
   </g>
  </>:<>
   <g data-part="hair-side-lock-left"><path d="M-27 -19Q-29 -13 -26 -7L-22 -8L-23 -20Z" fill={HAIR.base}/></g>
@@ -139,6 +138,7 @@ export const CharacterHead:React.FC<CharacterHeadProps>=({kind,frame,seed})=>{
  const feminine=kind==='eve';
  const look=oscillate(frame,.006,seed+6)*.55;
  const smile=.7+oscillate(frame,.008,seed+3)*.17;
+ const browFeel=oscillate(frame,.008,seed+3)*.35;
  return <g data-part="head-and-face" data-head-design={kind}>
   {kind==='adam'&&<CharacterHairBack kind={kind} frame={frame} seed={seed}/>}
   <g data-part="neck">
@@ -158,26 +158,28 @@ export const CharacterHead:React.FC<CharacterHeadProps>=({kind,frame,seed})=>{
    } fill={SKIN.base} stroke="#c49878" strokeWidth=".85"/>
    <path d="M-23 -4Q-24 19 -12 28Q-4 34 3 33Q-13 23 -13 3Z" fill={SKIN.shadow} opacity=".15"/>
    <path d="M14 -35Q25 -23 23 -4" fill="none" stroke={SKIN.light} strokeWidth="2.2" opacity=".5"/>
-   <ellipse cx="-16" cy="13" rx="5.9" ry="3.6" fill={SKIN.blush} opacity=".24"/>
-   <ellipse cx="16" cy="13" rx="5.9" ry="3.6" fill={SKIN.blush} opacity=".24"/>
+   <path d={feminine?'M-21 9C-21 21 -11 30 0 34':'M-22 11Q-20 25 -11 29L-5 31'} fill="none" stroke={SKIN.shadow} opacity=".18" strokeWidth="1.6"/>
+   <ellipse cx="-16.5" cy="14" rx={feminine?6.8:5.3} ry="3.45" fill={SKIN.blush} opacity={feminine?.20:.14}/>
+   <ellipse cx="15.7" cy="13" rx={feminine?6.4:5} ry="3.5" fill={SKIN.blush} opacity={feminine?.18:.12}/>
+   <path d="M-15 19Q-11 21 -7 21M10 20Q15 21 18 18" stroke={SKIN.light} strokeWidth=".85" opacity=".45" fill="none"/>
   </g>
   <g data-part="eyebrow-left">
-   <path d={feminine?'M-17 -11Q-11 -14 -5.5 -11':'M-18 -11Q-11 -15 -5 -11'} stroke="#634a42" strokeWidth={feminine?1.65:2} strokeLinecap="round" fill="none"/>
+   <path d={feminine?'M-17 -12C-13 -14.3 -9 -14.1 -5.4 -11.4':'M-18 -11.6C-13 -16 -8 -15 -4.8 -12'} stroke="#634a42" strokeWidth={feminine?1.55:2.15} strokeLinecap="round" fill="none" transform={'translate(0 '+browFeel+')'}/>
   </g>
   <g data-part="eyebrow-right">
-   <path d={feminine?'M5.5 -11Q11 -14 17 -11':'M5 -11Q12 -15 18 -11'} stroke="#634a42" strokeWidth={feminine?1.65:2} strokeLinecap="round" fill="none"/>
+   <path d={feminine?'M5.5 -11.4C9.7 -14.2 14 -13.6 17 -11':'M5 -11.7C10 -14.6 15 -14.7 18 -12.5'} stroke="#634a42" strokeWidth={feminine?1.55:2.15} strokeLinecap="round" fill="none" transform={'translate(0 '+(browFeel*.6)+')'}/>
   </g>
   <g data-part="eyes" transform={'translate('+look+' 0)'}>
    <ExpressiveEye side="left" kind={kind} frame={frame} seed={seed}/>
    <ExpressiveEye side="right" kind={kind} frame={frame} seed={seed}/>
   </g>
   <g data-part="nose">
-   <path d="M0 4L-2 10Q0 13 3 11" stroke="#ac806a" strokeWidth="1.4" fill="none" strokeLinecap="round"/>
+   <path d={feminine?'M.2 4Q-1.3 8.5 -1.5 10Q.4 12 2.2 10.8':'M.3 3.4Q-2.3 9 -2 10.9Q.1 13 3.4 11.3'} stroke="#ac806a" strokeWidth={feminine?1.2:1.4} fill="none" strokeLinecap="round"/>
    <path d="M2 4L3 8" stroke={SKIN.light} strokeWidth="1.1" fill="none" opacity=".6"/>
   </g>
   <g data-part="mouth">
-   <path d={'M-7.5 19Q0 '+(21.2+smile)+' 7.5 19'} stroke="#9c6e67" strokeWidth="1.8" fill="none" strokeLinecap="round"/>
-   <path d="M-3.2 24Q.3 25.2 3.5 24" stroke="#fff1d4" strokeWidth="1.0" fill="none" opacity=".7"/>
+   <path d={feminine?'M-7.3 18.8Q-.1 '+(20.9+smile)+' 7.5 18.1':'M-7.8 19.2Q.1 '+(21.3+smile)+' 7 18.7'} stroke="#9c6e67" strokeWidth={feminine?1.65:1.9} fill="none" strokeLinecap="round"/>
+   <path d="M-3 23.4Q.1 24.5 3.2 23.2" stroke="#fff1d4" strokeWidth=".95" fill="none" opacity=".55"/>
   </g>
   {kind==='adam'?<AdamFringe frame={frame} seed={seed}/>:<EveFringe frame={frame} seed={seed}/>}
   <SideLocks kind={kind} frame={frame} seed={seed}/>
