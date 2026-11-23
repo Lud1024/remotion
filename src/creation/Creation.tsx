@@ -9,6 +9,7 @@ import type {Cue} from '../core/gestures';
 import type {ExprName} from '../core/pose';
 import {STORY,WORDS,PAGES,FPS,TOTAL,sceneAt,wordAt,amplitudeAt} from './timing';
 import {renderWorld,THEMES,type Scene} from './world';
+import {SceneCastLayer} from './SceneCast';
 import SOUND from './sound.json';
 
 export type CreationProps={captions:boolean;withAudio:boolean};
@@ -32,6 +33,7 @@ const World:React.FC<{scene:Scene}>=({scene})=>{
  const progress=smooth(local/transitionFrames);
  return <>
   <div style={{position:'absolute',inset:0}} dangerouslySetInnerHTML={{__html:html}}/>
+  <SceneCastLayer scene={scene}/>
   {previousHtml&&<div data-scene-transition="true" style={{
    position:'absolute',inset:0,pointerEvents:'none',
    opacity:1-progress,

@@ -31,6 +31,11 @@ function load(filename){
 }
 const alignment=JSON.parse(fs.readFileSync('src/creation/alignment.json','utf8'));
 const {sceneCamera}=load('src/creation/artDirection.ts');
+const {worldStage}=load('src/creation/worldStage.ts');
+const castSource=fs.readFileSync('src/creation/SceneCast.tsx','utf8');
+const creationSource=fs.readFileSync('src/creation/Creation.tsx','utf8');
+for(const name of ['AdamCharacter','EveCharacter','LlamaLikeAnimal','AnimalCharacter','SceneCastLayer'])assert.ok(castSource.includes('export const '+name));
+assert.ok(creationSource.includes('<SceneCastLayer scene={scene}/>'));
 const {renderWorld}=load('src/creation/world.ts');
 assert.equal(alignment.scenes.length,14);
 assert.equal(alignment.durationInFrames,4250);
@@ -55,12 +60,13 @@ for(const scene of alignment.scenes){
    assert.ok(svg.includes('data-depth="air"'));
    assert.ok(!/NaN|undefined|Infinity/.test(svg),'Invalid numeric SVG for '+scene.id+':'+frame);
    assert.equal(svg,renderWorld(frame,scene,width,height),'Nondeterministic SVG '+scene.id+':'+frame);
-   if(scene.id==='animals')assert.ok(svg.includes('data-organic="animal"'));
+   if(scene.id==='animals')assert.ok(!svg.includes('data-organic="animal"'),'No duplicate legacy animals');
    if(scene.id==='plants')assert.ok(svg.includes('data-organic="plant"'));
-   if(scene.id==='humanity'){
-    assert.ok(svg.includes('data-organic="human"'));
-    assert.ok(svg.includes('data-detail="portrait"'));
+   if(['humanity','stewardship','good'].includes(scene.id)){
+    assert.ok(!svg.includes('data-organic="human"'),'No duplicate legacy humans');
    }
+   const stage=worldStage(frame,scene,width,height);
+   assert.ok([stage.x,stage.y,stage.scale].every(Number.isFinite),'Invalid shared character stage');
    if(scene.id==='origin'){
     assert.ok(svg.includes('data-environment="spherical-earth"'),'Origin must be spherical, not a water oval');
     assert.ok(svg.includes('set-planet-clip'));

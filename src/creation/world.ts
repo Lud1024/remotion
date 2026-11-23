@@ -68,106 +68,7 @@ function bird(x:number,y:number,size:number,t:number,seed:number) {
  return `<g transform="translate(${f(x)} ${f(y)}) scale(${size})"><path d="M0 2Q-22 ${f(-wing)} -62 ${f(-wing*.8)}Q-34 ${f(10-wing*.25)} -8 12Q0 23 8 12Q34 ${f(10-wing*.25)} 62 ${f(-wing*.8)}Q22 ${f(-wing)} 0 2Z" fill="#e9e6d1"/><path d="M0 3l8 15l-8 -3l-8 3Z" fill="#8ba6a7"/><path d="M0 -2l5 7h-10Z" fill="#e0b46a"/></g>`;
 }
 /** Jointed limbs move in place: weight shifts, never a treadmill-like foot slide. */
-function animalLeg(hipX:number,t:number,seed:number,foreground:boolean) {
- const hip=Math.sin(t*.012+seed*1.8)*(foreground?1.8:1.05);
- const knee=Math.sin(t*.015+seed*2.4+1.3)*1.4;
- const fill=foreground?'#ac9173':'#796f67';
- return `<g transform="translate(${hipX} -96) rotate(${f(hip)})" opacity="${foreground?1:.73}">
-  <path d="M0 0 Q${foreground?-5:3} 22 0 48" fill="none" stroke="${fill}" stroke-width="${foreground?17:14}" stroke-linecap="round"/>
-  <g transform="translate(0 48) rotate(${f(knee)})">
-   <path d="M0 0 Q${foreground?3:-3} 25 0 46" fill="none" stroke="${fill}" stroke-width="${foreground?13:11}" stroke-linecap="round"/>
-   <path d="M-7 44Q7 42 17 47Q18 52 12 53H-9Z" fill="${foreground?'#5f625b':'#505c58'}"/>
-  </g>
-  <circle cy="48" r="5" fill="#c8b18f" opacity=".28"/>
- </g>`;
-}
-function animal(x:number,y:number,size:number,t:number,seed:number) {
- const breathe=Math.sin(t*.019+seed*2)*1.6;
- const weight=Math.sin(t*.008+seed*1.6)*1.1;
- const neck=Math.sin(t*.012+seed*1.3)*1.9;
- const tail=Math.sin(t*.028+seed*2.4)*7;
- const blink=Math.max(0,1-Math.abs(((t+seed*81)%127)-64)/3);
- return `<g data-organic="animal" transform="translate(${f(x)} ${f(y)}) scale(${f(size)})">
-  <ellipse cy="8" rx="104" ry="15" fill="#061a21" opacity=".28"/>
-  ${animalLeg(-58,t,seed+.5,false)}${animalLeg(42,t+16,seed+1.2,false)}
-  <g transform="translate(0 ${f(breathe)}) rotate(${f(weight*.45)})">
-   <path d="M-84 -127Q-110 ${f(-147+tail*.3)} ${f(-129+tail)} ${f(-151+tail)}" fill="none" stroke="#998165" stroke-width="6" stroke-linecap="round"/>
-   <path d="M-88 -129Q-31 -169 61 -125L74 -91Q25 -56 -72 -90Z" fill="url(#c-animal)" stroke="#897b68" stroke-width="1.8"/>
-   <path d="M-77 -125Q-19 -146 53 -119" stroke="#f4dbb5" stroke-width="3.6" fill="none" opacity=".55" stroke-linecap="round"/>
-   <path d="M-48 -103Q8 -73 59 -103" stroke="#695f5c" stroke-width="1.8" fill="none" opacity=".28"/>
-   <g transform="translate(58 -111) rotate(${f(neck)})">
-    <path d="M-8 0Q12 -33 16 -93L39 -89L41 -12L16 18Z" fill="#af9274" stroke="#857361" stroke-width="1.7"/>
-    <path d="M15 -89Q43 -108 58 -89L79 -76L70 -63L39 -64L22 -73Z" fill="#cbb08c"/>
-    <path d="M30 -93l-9 -24l0 27 M46 -94l9 -24l7 25" fill="#d8c2a0"/>
-    <path d="M24 -91Q38 -98 50 -86" stroke="#f3ddba" stroke-width="2" opacity=".75" fill="none"/>
-    <ellipse cx="58" cy="-85" rx="4" ry="${f(3.1*(1-blink)+.4)}" fill="#203039"/>
-    <path d="M68 -71q6 2 11 0" stroke="#63584e" stroke-width="1.4" fill="none"/>
-   </g>
-  </g>
-  ${animalLeg(-49,t+10,seed+2,true)}${animalLeg(40,t+34,seed+3,true)}
- </g>`;
-}
-/** Editorial character illustration: clothing drape, hands, hair, facial micro-expressions and weight. */
-function human(x:number,y:number,size:number,feminine:boolean,t:number) {
- const seed=feminine?7:3;
- const breath=Math.sin(t*.017+seed)*1.4;
- const weight=Math.sin(t*.006+seed*.7)*1.5;
- const head=Math.sin(t*.012+seed*1.2)*1.3;
- const blink=Math.max(0,1-Math.abs(((t+seed*43)%151)-75)/3);
- const look=Math.sin(t*.009+seed)*1.4;
- const left=Math.sin(t*.012+seed)*2.4;
- const right=Math.sin(t*.011+seed+1.7)*2.1;
- const skin='#d6ae8c',skinDark='#aa7e65';
- const cloth=feminine?'#e5c99d':'#a5c6b9';
- const dark=feminine?'#a98661':'#537f77';
- const glow=feminine?'#f8e6c6':'#d7ece0';
- return `<g data-organic="human" data-detail="portrait" transform="translate(${f(x)} ${f(y)}) scale(${f(size)})">
-  <ellipse cy="37" rx="39" ry="8" fill="#091d29" opacity=".23"/>
-  <g transform="translate(${f(weight)} 0)">
-   <path d="M-16 -31L-17 27M16 -31L16 27" stroke="#314d53" stroke-width="16" stroke-linecap="round"/>
-   <path d="M-28 28Q-19 22 -8 27L-7 34L-29 34Z M7 27Q17 22 27 29V34H7Z" fill="#9f8667"/>
-   <path d="M-27 33h19M8 33h18" fill="none" stroke="#eed5a9" stroke-width="2" opacity=".65"/>
-   <g transform="translate(0 ${f(breath)})">
-    <path d="M-20 -126Q-37 -121 -36 -106L-48 -49Q-27 -34 -16 -39L-10 -88Z" fill="${dark}" opacity=".82"/>
-    <path d="M19 -125Q37 -120 35 -106L48 -49Q28 -34 16 -39L9 -89Z" fill="${dark}" opacity=".82"/>
-    <path d="M-25 -116Q-38 -102 -34 -76L-40 -52Q-35 -46 -29 -51L-20 -74Z" fill="${cloth}" transform="rotate(${f(left)} -25 -116)"/>
-    <path d="M25 -116Q39 -102 35 -77L41 -52Q37 -45 30 -50L21 -74Z" fill="${cloth}" transform="rotate(${f(right)} 25 -116)"/>
-    <ellipse cx="-36" cy="-48" rx="7" ry="10" fill="${skin}"/>
-    <ellipse cx="36" cy="-48" rx="7" ry="10" fill="${skin}"/>
-    <path d="M-8 -139Q-26 -131 -28 -111Q-31 -78 -42 -27Q-2 -13 45 -27Q29 -79 28 -115Q22 -133 7 -139Z" fill="${cloth}" stroke="${dark}" stroke-width="1.4"/>
-    <path d="M-8 -138Q-23 -119 -15 -78L-10 -31 M11 -137Q26 -119 23 -81L27 -32" stroke="${glow}" stroke-width="2.8" opacity=".42" fill="none"/>
-    <path d="M-27 -57Q0 -49 30 -58" stroke="${dark}" stroke-width="5" fill="none" opacity=".58"/>
-    <path d="M-28 -53Q0 -46 30 -54" stroke="${glow}" stroke-width="1.3" fill="none" opacity=".65"/>
-    ${feminine?`<path d="M-7 -139Q-24 -123 -18 -107L-1 -86Q14 -108 17 -132" fill="#dcb888" opacity=".37"/>
-      <path d="M-39 -30Q-6 -16 40 -28" stroke="#fff0cf" stroke-width="3" opacity=".45" fill="none"/>
-      <path d="M-32 -99Q-38 -62 -38 -38 M29 -107Q33 -74 35 -39" stroke="#a47f59" stroke-width="1.4" opacity=".5" fill="none"/>`:`<path d="M-16 -135Q0 -119 16 -135" fill="none" stroke="#e9e1cf" stroke-width="5"/>
-      <path d="M-32 -35Q-8 -28 35 -36" fill="none" stroke="#6e9f92" stroke-width="1.7" opacity=".55"/>`}
-    <g transform="translate(0 -161) rotate(${f(head)})">
-     ${feminine?`<path d="M-25 -12Q-37 -48 -15 -58Q18 -73 34 -36L27 26Q15 41 9 41L-19 30Q-32 13 -25 -12Z" fill="#302f38"/>`:''}
-     <path d="M-10 22h20l3 25h-26Z" fill="${skin}"/>
-     <ellipse cx="-22" cy="0" rx="5" ry="10" fill="${skinDark}"/>
-     <ellipse cx="22" cy="0" rx="5" ry="10" fill="${skinDark}"/>
-     <path d="M-22 -23Q-23 -39 0 -42Q26 -40 23 -16L23 15Q15 33 0 34Q-17 30 -23 15Z" fill="url(#c-human)" stroke="#af866d" stroke-width="1.2"/>
-     <path d="M-20 -22Q-28 -48 -5 -53Q23 -55 29 -28L21 -12Q11 -25 8 -31Q-4 -17 -20 -22Z" fill="#30313a"/>
-     ${feminine?`<path d="M-25 -25Q-34 -11 -29 13Q-26 27 -19 31L-18 10Q-23 -6 -18 -19 M22 -23Q32 -10 29 12Q26 30 19 33L21 11" fill="#302f38"/>`:`<path d="M-23 -16Q-13 -21 -7 -28Q6 -22 22 -22" stroke="#45434b" stroke-width="3.2" fill="none"/>`}
-     <path d="M-16 -3q6 -4 12 -1M6 -4q5 -3 10 1" stroke="#554b48" stroke-width="1.7" fill="none" opacity=".8"/>
-     <g transform="translate(${f(look)} 0)">
-      <ellipse cx="-10" cy="2" rx="3.2" ry="${f(2.7*(1-blink)+.15)}" fill="#453b37"/>
-      <ellipse cx="10" cy="2" rx="3.2" ry="${f(2.7*(1-blink)+.15)}" fill="#453b37"/>
-      <circle cx="-9.3" cy="1.4" r=".8" fill="#fff9e8" opacity=".9"/>
-      <circle cx="10.7" cy="1.4" r=".8" fill="#fff9e8" opacity=".9"/>
-     </g>
-     <path d="M0 2l-3 9q3 2 6 0" stroke="#9d7969" stroke-width="1.15" fill="none" opacity=".75"/>
-     <path d="M-7 18Q0 21 7 18" stroke="#a46f67" stroke-width="1.7" fill="none" stroke-linecap="round"/>
-     <ellipse cx="-15" cy="13" rx="6.3" ry="3.2" fill="#d99185" opacity=".17"/>
-     <ellipse cx="15" cy="13" rx="6.3" ry="3.2" fill="#d99185" opacity=".17"/>
-     <path d="M-18 -28Q-2 -44 16 -30" stroke="#79716a" opacity=".3" stroke-width="2" fill="none"/>
-    </g>
-    <path d="M-19 -118Q-4 -112 13 -119" stroke="${glow}" stroke-width="1.8" opacity=".4" fill="none"/>
-   </g>
-  </g>
- </g>`;
-}
+/* Detailed humans and animals now live as editable React SVG groups in SceneCast.tsx. */
 export const THEMES:Record<string,{top:string;bottom:string;accent:string}>={
  hook:{top:'#07101e',bottom:'#123244',accent:'#efbe71'},origin:{top:'#030810',bottom:'#102c3c',accent:'#9ac7d5'},
  light:{top:'#14283d',bottom:'#bc9766',accent:'#ffe9b2'},sky:{top:'#0d364c',bottom:'#418d98',accent:'#d0eee5'},
@@ -229,20 +130,17 @@ export function renderWorld(frame:number,scene:Scene,width:number,height:number)
    <path d="M-1450 201Q-410 145 620 193T1450 204" fill="none" stroke="#d1cba4" stroke-width="2" opacity=".24"/>
    <ellipse cx="-170" cy="203" rx="110" ry="14" fill="#112e2e" opacity=".23"/>
    <ellipse cx="172" cy="203" rx="88" ry="12" fill="#112e2e" opacity=".18"/>
-   ${animal(-170,190,1.2,t,0)}${animal(172,183,.86,t,1)}${animal(342,205,.59,t,2)}
    ${plant(-380,210,.83,t+300,7)}${plant(428,224,.9,t+300,8)}
    ${Array.from({length:11},(_,i)=>{
      const x=-710+hash(i+61)*1440,y=235+hash(i+75)*100;
      return `<path d="M${f(x)} ${f(y)}l-4 -${f(8+hash(i+19)*9)}M${f(x)} ${f(y)}l6 -${f(7+hash(i+10)*11)}" stroke="#bbcf9a" stroke-width="1.3" opacity=".4"/>`;
    }).join('')}`;
  } else if(scene.id==='humanity'||scene.id==='stewardship') {
-  const personScale=vertical?1.8:2.3;
   // A continuous valley lets the people inhabit an actual landscape, not a cut-off podium.
   objects=`<circle cy="-55" r="320" fill="url(#c-halo)" opacity=".76"/>
    <path d="M-1700 175Q-1050 123 -480 184Q30 112 500 163T1700 175V1700H-1700Z" fill="url(#c-land)"/>
    <path d="M-1700 254Q-900 165 -370 253Q240 201 790 263T1700 226V1700H-1700Z" fill="#47796c" opacity=".39"/>
    <path d="M-1100 194Q-250 155 600 198T1220 193" stroke="#e6d3aa" stroke-width="2.2" opacity=".26" fill="none"/>
-   ${human(-121,192,personScale,false,t)}${human(122,192,personScale,true,t)}
    ${scene.id==='stewardship'?`${plant(-520,219,.98,t+200,1)}${plant(520,219,1.04,t+200,2)}`:''}
    ${Array.from({length:9},(_,i)=>{
     const x=-850+hash(i+31)*1800;
@@ -253,7 +151,6 @@ export function renderWorld(frame:number,scene:Scene,width:number,height:number)
    <path d="M-1550 185L-1060 130L-800 20L-520 182L-310 -8L-102 101L44 -71L190 96L347 17L610 151L950 -12L1550 180V1750H-1550Z" fill="url(#c-land)"/>
    <path d="M-1550 268Q-610 145 190 241T1550 255V1750H-1550Z" fill="#34675c" opacity=".5"/>
    ${plant(-180,180,.9,t+300,1)}${plant(240,150,.8,t+300,3)}
-   ${human(20,135,.65,false,t)}${human(75,135,.65,true,t)}
    ${bird(-30,-160,.7,t,5)}${bird(110,-190,.45,t,6)}`;
  } else if(scene.id==='rest') {
   objects=`<circle cy="-60" r="230" fill="url(#c-halo)" opacity=".6"/>${orb(100,-80,90,'url(#c-moon)')}
