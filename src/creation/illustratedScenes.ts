@@ -174,14 +174,14 @@ function field(W:number,H:number,t:number,plants:boolean,treeReveal:number) {
   <rect width="${W}" height="${H}" fill="url(#set-sky)"/>
   <circle cx="${f(W*.81)}" cy="${f(H*.21)}" r="${f(H*.17)}" fill="url(#set-sun)" opacity=".72"/>
   ${mountains(W,H,'#759d96',.65)}
-  <path d="M0 ${f(y)}Q${f(W*.36)} ${f(y-20)} @ {W} ${f(y+20)}" stroke="#e5ebc9" fill="none" opacity=".4"/>
+  <path d="M0 ${f(y)}Q${f(W*.36)} ${f(y-20)} ${W} ${f(y+20)}" stroke="#e5ebc9" fill="none" opacity=".4"/>
   <g transform="translate(0 ${f((1-rise)*H*.4)})">
    ${hill}
    ${herbs}
    ${grove}
    <path d="M0 ${f(H*.92)}Q${f(W*.39)} ${f(H*.81)} ${f(W*.78)} ${f(H*.94)}T${W} ${f(H*.95)}V${H}H0Z" fill="#193f3f" opacity=".58"/>
   </g>
- </g>`.replace(' @ {W}',String(W));
+ </g>`;
 }
 function paradise(W:number,H:number,t:number) {
  const y=H*.69,vert=H>W;

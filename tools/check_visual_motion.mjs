@@ -35,7 +35,7 @@ const {worldStage}=load('src/creation/worldStage.ts');
 const castSource=fs.readFileSync('src/creation/SceneCast.tsx','utf8');
 const creationSource=fs.readFileSync('src/creation/Creation.tsx','utf8');
 for(const name of ['AdamCharacter','EveCharacter','LlamaLikeAnimal','AnimalCharacter','SceneCastLayer'])assert.ok(castSource.includes('export const '+name));
-assert.ok(creationSource.includes('<SceneCastLayer scene={scene}/>'));
+assert.ok(creationSource.includes('<SceneCastLayer scene={scene} globalFrame={globalFrame}/>'), 'Cast must be keyed to the absolute Remotion frame');;
 const {renderWorld}=load('src/creation/world.ts');
 assert.equal(alignment.scenes.length,14);
 assert.equal(alignment.durationInFrames,4250);

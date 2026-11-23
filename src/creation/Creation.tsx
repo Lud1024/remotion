@@ -17,7 +17,7 @@ const TYPE='Bahnschrift, "Arial", sans-serif';
 const ACCENT='#f4c66f';
 const mouthTracks=WORDS.map(w=>provisionalVisemes(w.text,(w.endMs-w.startMs)/1000));
 
-const World:React.FC<{scene:Scene}>=({scene})=>{
+const World:React.FC<{scene:Scene;globalFrame:number}>=({scene,globalFrame})=>{
  const local=useCurrentFrame();
  const {width,height}=useVideoConfig();
  const html=useMemo(()=>renderWorld(local+scene.start,scene,width,height),[local,scene,width,height]);
@@ -33,7 +33,7 @@ const World:React.FC<{scene:Scene}>=({scene})=>{
  const progress=smooth(local/transitionFrames);
  return <>
   <div style={{position:'absolute',inset:0}} dangerouslySetInnerHTML={{__html:html}}/>
-  <SceneCastLayer scene={scene}/>
+  <SceneCastLayer scene={scene} globalFrame={globalFrame}/>
   {previousHtml&&<div data-scene-transition="true" style={{
    position:'absolute',inset:0,pointerEvents:'none',
    opacity:1-progress,
@@ -139,7 +139,7 @@ const Sound:React.FC=()=> <>
 export const Creation:React.FC<CreationProps>=({captions,withAudio})=>{
  const frame=useCurrentFrame();
  return <AbsoluteFill data-creation-frame={frame} style={{background:'#07101c',overflow:'hidden'}}>
-  {STORY.scenes.map(scene=><Sequence key={scene.id} name={scene.title.replace('\n',' ')} from={scene.start} durationInFrames={scene.end-scene.start}><World scene={scene}/></Sequence>)}
+  {STORY.scenes.map(scene=><Sequence key={scene.id} name={scene.title.replace('\n',' ')} from={scene.start} durationInFrames={scene.end-scene.start}><World scene={scene} globalFrame={frame}/></Sequence>)}
   <Presenter/>
   <Titles/>
   <Finishing/>
