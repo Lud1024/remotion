@@ -26,9 +26,10 @@ try {
      const headContours=[...root.querySelectorAll('[data-head-design]')].map(head=>{
       const face=head.querySelector('[data-part="head"]');
       const hair=head.querySelector('[data-part="hair-front"]');
+      const hairline=head.querySelector('[data-part="fringe-sweep"]');
       const eye=head.querySelector('[data-part="eye-left"]');
       const forehead=face?.getBBox();
-      const fringe=hair?.getBBox();
+      const fringe=hairline?.getBBox();
       const eyes=eye?.getBBox();
       return {kind:head.getAttribute('data-head-design'),order:face&&hair?!!(face.compareDocumentPosition(hair)&Node.DOCUMENT_POSITION_FOLLOWING):false,
        integrated:!!(forehead&&fringe&&eyes&&fringe.y<forehead.y-7&&fringe.y+fringe.height<eyes.y-2),
