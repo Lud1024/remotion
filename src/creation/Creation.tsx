@@ -55,7 +55,12 @@ const Presenter:React.FC=()=>{
  const {width,height}=useVideoConfig();
  const script=useMemo(()=>actorScript(width,height),[width,height]);
  const scene=sceneAt(frame),t=frame-scene.start;
- const visibleFor=scene.id==='hook'?220:scene.id==='eden'?scene.end-scene.start:Math.min(130,scene.end-scene.start);
+ // The narrator introduces the scene, then yields the frame to the featured artwork.
+ // The presenter remains intact throughout the film; only these two beats use shorter coverage.
+ const visibleFor=scene.id==='hook'?220:
+  scene.id==='humanity'?Math.min(55,scene.end-scene.start):
+  scene.id==='eden'?Math.min(110,scene.end-scene.start):
+  Math.min(130,scene.end-scene.start);
  if(t>=visibleFor||frame>=STORY.markers.close+15) return null;
  const opacity=(scene.start===0?1:smooth(t/10))*smooth((visibleFor-t)/12);
  const rig=animate(frame,script);
