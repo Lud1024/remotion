@@ -18,24 +18,29 @@ const blinking=(frame:number,seed:number)=>{
 };
 
 function ArtEye({x,y,blink,gaze,soft=false}:{x:number;y:number;blink:number;gaze:number;soft?:boolean}) {
- const eyeHeight=4.5*(1-blink)+.23;
+ const openness=Math.max(.08,1-blink);
  return <g data-part={x<0?'eye-left':'eye-right'} transform={'translate('+x+' '+y+')'}>
-  <path d="M-7 0Q0 -6 7 0Q0 5 -7 0Z" fill="#fff2db" opacity=".92"/>
-  <ellipse cx={gaze} cy="0" rx="3.35" ry={eyeHeight} fill="#6c5848"/>
-  <ellipse cx={gaze+.5} cy=".2" rx="2.03" ry={Math.min(3.2,eyeHeight)} fill="#252f37"/>
-  <circle cx={gaze-.55} cy="-1.35" r="1.1" fill="#fff9e8"/>
-  <path d={soft?'M-7 0Q0 -5.6 7 0':'M-7 0Q0 -6.8 7 0'} stroke="#544a42" strokeWidth="1.55" fill="none" strokeLinecap="round"/>
-  {soft&&<path d="M6 -1l2 -2" stroke="#534743" strokeWidth="1" strokeLinecap="round"/>}
+  <g data-part="eyelid-opening" transform={'scale(1 '+openness+')'}>
+   <path d="M-8 0Q0 -6.3 8 0Q0 6.7 -8 0Z" fill="#fff3de" stroke="#b99478" strokeWidth=".75"/>
+   <circle cx={gaze} cy="0" r="4.35" fill="#8f6951"/>
+   <circle cx={gaze+.25} cy=".15" r="3.0" fill="#29383f"/>
+   <circle cx={gaze-1.25} cy="-1.45" r="1.38" fill="#fffaf0"/>
+   <circle cx={gaze+1.2} cy="1.4" r=".6" fill="#fff1dd" opacity=".7"/>
+  </g>
+  <path d={soft?'M-8 0Q0 -6.5 8 0':'M-8 0Q0 -7.1 8 0'} stroke="#544a42" strokeWidth="1.9" fill="none" strokeLinecap="round"/>
+  {blink>.73&&<path d="M-8 0Q0 1.5 8 0" stroke="#ad806e" strokeWidth="1.3" fill="none"/>}
+  {soft&&<path d="M6 -2l2 -2M-7 -2l-1.6 -1" stroke="#554846" strokeWidth="1.25" strokeLinecap="round"/>}
  </g>;
 }
 
-function DetailedHair({kind,frame,seed}:{kind:HumanKind;frame:number;seed:number}) {
+function DetailedHair({kind,frame,seed,layer}:{kind:HumanKind;frame:number;seed:number;layer:'back'|'front'}) {
  const breeze=wave(frame,.010,seed)*1.7;
- if(kind==='adam')return <>
+ if(kind==='adam')return layer==='back'?<>
   <g data-part="hair-back">
    <path d="M-25 -15Q-33 -43 -12 -54Q8 -62 23 -46Q33 -35 26 -11L22 -20Q10 -26 -3 -20Q-18 -15 -25 -15Z" fill="#272f36"/>
    <path d="M-23 -31Q-20 -49 -7 -52Q9 -56 21 -43" stroke="#485158" strokeWidth="4" opacity=".7" fill="none"/>
   </g>
+ </>:<>
   <g data-part="hair-front" transform={'rotate('+breeze+' 0 -34)'}>
    <path d="M-26 -25Q-26 -48 -8 -52Q-1 -50 5 -45Q1 -31 -18 -23Z" fill="#343d43"/>
    <path d="M-17 -41Q-10 -55 7 -54Q18 -49 22 -36Q10 -41 2 -31Q-3 -35 -17 -31Z" fill="#242c35"/>
@@ -44,12 +49,13 @@ function DetailedHair({kind,frame,seed}:{kind:HumanKind;frame:number;seed:number
    <path d="M-22 -29Q-12 -42 -2 -42M1 -45Q10 -52 17 -45" stroke="#6c7371" strokeWidth="1.45" opacity=".55" fill="none"/>
   </g>
  </>;
- return <>
+ return layer==='back'?<>
   <g data-part="hair-back">
    <path d="M-24 -24Q-38 -57 -8 -63Q23 -70 34 -41Q38 -11 34 13L41 81Q18 101 2 83Q-20 101 -36 82L-31 16Z" fill="#252d37"/>
    <path d="M-30 -25Q-31 23 -33 61Q-30 83 -19 86L-16 18" fill="#42424b" opacity=".65"/>
    <path d="M27 -25Q39 15 37 68Q37 82 25 88" stroke="#5c5358" strokeWidth="4" opacity=".46" fill="none"/>
   </g>
+ </>:<>
   <g data-part="hair-front" transform={'rotate('+breeze+' 0 -47)'}>
    <path d="M-26 -24Q-30 -48 -7 -58Q21 -63 29 -38Q21 -27 10 -30Q0 -22 -9 -24Q-18 -19 -26 -16Z" fill="#313640"/>
    <path d="M-28 -18Q-30 -1 -27 25Q-24 39 -18 44Q-22 18 -18 -2Q-9 -17 -7 -34Z" fill="#3d444b"/>
@@ -73,7 +79,7 @@ function PortraitFace({kind,frame,seed}:{kind:HumanKind;frame:number;seed:number
  const skin='#ecc9a5',shade='#c39377',highlight='#f7ddba';
  const smile=.8+wave(frame,.006,seed+3)*.25;
  return <g data-part="head-and-face">
-  <DetailedHair kind={kind} frame={frame} seed={seed}/>
+  <DetailedHair kind={kind} frame={frame} seed={seed} layer="back"/>
   <g data-part="neck">
    <path d="M-10 20L-11 41Q0 48 13 41L10 20Z" fill={skin}/>
    <path d="M-10 21Q-3 34 8 33L13 41Q3 45 -4 43Z" fill={shade} opacity=".25"/>
@@ -90,6 +96,7 @@ function PortraitFace({kind,frame,seed}:{kind:HumanKind;frame:number;seed:number
    <ellipse cx="-15" cy="15" rx="7.2" ry="4.2" fill="#dc978c" opacity=".23"/>
    <ellipse cx="15" cy="15" rx="7.2" ry="4.2" fill="#dc978c" opacity=".23"/>
   </g>
+  <DetailedHair kind={kind} frame={frame} seed={seed} layer="front"/>
   <g data-part="eyebrow-left">
    <path d={soft?'M-17 -9Q-11 -13 -5 -10':'M-17 -10Q-11 -14 -5 -10'} stroke="#554944" strokeWidth={soft?1.65:2.1} fill="none" strokeLinecap="round"/>
   </g>
@@ -194,6 +201,10 @@ export const LlamaLikeAnimal:React.FC<LlamaProps>=({x,y,scale,frame,seed=0,juven
    <path d="M-84 -126Q-43 -154 5 -149Q40 -149 61 -131" fill="none" stroke={light} strokeWidth="5" strokeLinecap="round" opacity=".65"/>
    <path d="M-53 -94Q7 -78 61 -105Q45 -86 17 -81L-53 -88Z" fill={shade} opacity=".52"/>
    <path d="M44 -131Q66 -136 74 -112Q78 -101 67 -89Q50 -93 39 -114Z" fill="#b79774" opacity=".4"/>
+   <g data-part="chest-fur" fill="#e9c79c" opacity=".8">
+    <path d="M47 -112Q59 -107 55 -93Q64 -102 67 -91Q73 -101 65 -114Z"/>
+    <path d="M-49 -91Q-6 -78 32 -92Q-3 -82 -39 -88Z" opacity=".55"/>
+   </g>
   </g>
   <g data-part="neck-pivot" transform={'translate(56 -115) rotate('+headTilt+')'}>
    <g data-part="neck">
@@ -204,6 +215,7 @@ export const LlamaLikeAnimal:React.FC<LlamaProps>=({x,y,scale,frame,seed=0,juven
    <g data-part="head" transform="translate(19 -93)">
     <path d="M-11 -2Q-9 -24 13 -30Q38 -31 46 -8L57 1Q52 10 31 12L14 14Q-8 12 -11 -2Z" fill={warm} stroke="#97795e" strokeWidth="1.25"/>
     <path d="M13 -20Q33 -29 43 -14" stroke={light} strokeWidth="3" fill="none" opacity=".6"/>
+    <path data-part="forehead-fur" d="M-2 -14Q5 -27 14 -29Q25 -25 26 -22Q19 -21 16 -16Z" fill="#e8c99d" opacity=".63"/>
     <g data-part="ears" transform={'rotate('+ear+' 13 -20)'}>
      <path d="M9 -21L-1 -56Q14 -52 22 -25Z" fill={shade}/>
      <path d="M13 -28L7 -47Q14 -42 18 -29Z" fill="#e9c79f"/>
@@ -239,7 +251,7 @@ export const SceneCastLayer:React.FC<{scene:Scene}>=({scene})=>{
  const entrance=spring({fps,frame:Math.max(0,local),config:{damping:200,stiffness:90}});
  const opacity=interpolate(local,[0,12],[0,1],{extrapolateLeft:'clamp',extrapolateRight:'clamp'});
  const vertical=height>width;
- const personScale=vertical?1.8:2.3;
+ const personScale=vertical?1.99:2.49;
  return <svg data-character-cast={scene.id} width={width} height={height} viewBox={'0 0 '+width+' '+height} style={{position:'absolute',inset:0,pointerEvents:'none',overflow:'visible',opacity}}>
   <g transform={'translate('+stage.x+' '+stage.y+') scale('+stage.scale+')'}>
    <g transform={'translate(0 '+((1-entrance)*7)+')'}>
