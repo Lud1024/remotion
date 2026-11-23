@@ -34,6 +34,7 @@ try {
       return {kind:head.getAttribute('data-head-design'),order:face&&hair?!!(face.compareDocumentPosition(hair)&Node.DOCUMENT_POSITION_FOLLOWING):false,
        integrated:!!(forehead&&fringe&&eyes&&fringe.y<forehead.y-7&&fringe.y+fringe.height<eyes.y-2),
        faceRatio:forehead&&forehead.width>0?forehead.height/forehead.width:null,
+       chinY:forehead?forehead.y+forehead.height:null,
        hairFront:!!hair,skull:!!face};
      });
      return {headContours,frame:Number(root.getAttribute('data-creation-frame')),scene:svg?.getAttribute('data-world'),cast:[...root.querySelectorAll('[data-character-design]')].map(n=>n.getAttribute('data-character-design')),castLayers:[...root.querySelectorAll('[data-character-cast]')].map(n=>n.getAttribute('data-character-cast')),hair:[...root.querySelectorAll('[data-part="hair-front"]')].length,eyes:[...root.querySelectorAll('[data-part="eye-left"], [data-part="eye-right"]')].length,invalid:all.some(s=>/NaN|undefined|Infinity/.test(s.outerHTML)),xmlError:all.some(s=>!!new DOMParser().parseFromString(s.outerHTML,'image/svg+xml').querySelector('parsererror')),subtitle:subs?.textContent??null,highlighted:[...root.querySelectorAll('[data-emphasized="true"]')].map(n=>Number(n.getAttribute('data-word'))),branding:root.textContent.includes('SHALÓM'),ending:!!root.querySelector('[data-ending]'),subtitleHeight:s?s.height/(r.height/Number(svg?.getAttribute('height'))):0,rect:{x:r.x,y:r.y,width:r.width,height:r.height}};
@@ -64,8 +65,10 @@ try {
    assert.deepEqual(state.headContours.map(h=>h.kind),['adam','eve']);
    assert.ok(state.headContours.every(h=>h.order&&h.integrated&&h.hairFront&&h.skull),
     'Hair must extend over the crown, integrate with the forehead and remain in front of the skull');
-   assert.ok(state.headContours.every(h=>typeof h.faceRatio==='number'&&h.faceRatio>1.22&&h.faceRatio<1.41),
-    'Adam and Eve must have compact faces, not elongated ovals');
+   assert.ok(state.headContours.every(h=>typeof h.faceRatio==='number'&&h.faceRatio>1.28&&h.faceRatio<1.43),
+    'Adam and Eve should have intermediate short-oval faces, neither compressed nor elongated');
+   assert.ok(state.headContours.every(h=>h.chinY>=23&&h.chinY<=27),
+    'The soft chin must sit between the overly short and overly long previous designs');
   }
   if(capture){const {value}=await page._client().send('Page.captureScreenshot',{format:'png',clip:{...state.rect,scale:1},captureBeyondViewport:true});fs.writeFileSync(`qa/rebuild/studio/${id}-${scene.id}-${frame}.png`,Buffer.from(value.data,'base64'));}
   report.push({id,frame,scene:scene.id,caption:state.subtitle,highlighted:state.highlighted});
