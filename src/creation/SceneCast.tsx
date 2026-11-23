@@ -79,7 +79,7 @@ function PortraitFace({kind,frame,seed}:{kind:HumanKind;frame:number;seed:number
  const skin='#ecc9a5',shade='#c39377',highlight='#f7ddba';
  const smile=.8+wave(frame,.006,seed+3)*.25;
  return <g data-part="head-and-face">
-  <DetailedHair kind={kind} frame={frame} seed={seed} layer="back"/>
+  {kind==='adam'&&<DetailedHair kind={kind} frame={frame} seed={seed} layer="back"/>}
   <g data-part="neck">
    <path d="M-10 20L-11 41Q0 48 13 41L10 20Z" fill={skin}/>
    <path d="M-10 21Q-3 34 8 33L13 41Q3 45 -4 43Z" fill={shade} opacity=".25"/>
@@ -135,6 +135,9 @@ function HumanFigure({kind,x,y,scale,frame,seed=0}:FigureProps&{kind:HumanKind})
     <path d="M-25 33H-6M6 33H25" stroke="#f2dfbc" strokeWidth="1.8" opacity=".63"/>
    </g>
    <g data-part="breathing" transform={'translate(0 '+breath+')'}>
+    {feminine&&<g data-part="long-hair-behind-clothes" transform={'translate(0 -162) rotate('+nod+')'}>
+     <DetailedHair kind="eve" frame={frame} seed={seed} layer="back"/>
+    </g>}
     <g data-part="arms-left" transform={'rotate('+armL+' -26 -118)'}>
      <path d="M-27 -116Q-41 -107 -39 -88L-43 -58Q-39 -48 -33 -50L-22 -85Z" fill={color} stroke={low} strokeWidth="1"/>
      <path d="M-38 -82Q-42 -70 -42 -60" fill="none" stroke={light} strokeWidth="2.2" opacity=".55"/>
