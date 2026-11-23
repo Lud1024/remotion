@@ -242,11 +242,11 @@ export const LlamaLikeAnimal:React.FC<LlamaProps>=({x,y,scale,frame,seed=0,juven
 export const AnimalCharacter=LlamaLikeAnimal;
 
 /** Cast only: the original landscape, subtitles, audio and presenter are untouched. */
-export const SceneCastLayer:React.FC<{scene:Scene}>=({scene})=>{
+export const SceneCastLayer:React.FC<{scene:Scene;globalFrame:number}>=({scene,globalFrame})=>{
  const local=useCurrentFrame();
  const {width,height,fps}=useVideoConfig();
  const frame=local+scene.start;
- if(!['animals','humanity','stewardship','good'].includes(scene.id))return null;
+ if(!['animals','humanity','stewardship','good'].includes(scene.id)||globalFrame<scene.start||globalFrame>=scene.end)return null;
  const stage=worldStage(frame,scene,width,height);
  const entrance=spring({fps,frame:Math.max(0,local),config:{damping:200,stiffness:90}});
  const opacity=interpolate(local,[0,12],[0,1],{extrapolateLeft:'clamp',extrapolateRight:'clamp'});
