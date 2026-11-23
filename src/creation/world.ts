@@ -223,23 +223,35 @@ export function renderWorld(frame:number,scene:Scene,width:number,height:number)
    ${Array.from({length:80},(_,i)=>{const x=hash(i+7)*950-475,y=hash(i+88)*700-350;return `<circle cx="${f(x)}" cy="${f(y)}" r="${f(1+hash(i)*2)}" fill="#f0ead1" opacity="${f(.3+Math.sin(t*.025+i)*.2)}"/>`;}).join('')}
    <circle cx="${f(Math.cos(orbit)*390)}" cy="${f(Math.sin(orbit)*180)}" r="6" fill="#f0c578"/>`;
  } else if(scene.id==='animals') {
-  objects=`<path d="M-520 270Q-240 85 0 175T530 265V370H-520Z" fill="url(#c-land)"/>
-   <path d="M-450 194Q-240 123 -30 187T450 213" fill="none" stroke="#d9c9a2" stroke-width="2" opacity=".38"/>
-   <ellipse cx="-160" cy="193" rx="136" ry="20" fill="#0d3035" opacity=".25"/>
-   <ellipse cx="170" cy="188" rx="88" ry="12" fill="#0d3035" opacity=".22"/>
-   ${animal(-160,185,1.2,t,0)}${animal(170,180,.82,t,1)}${animal(310,205,.55,t,2)}
-   ${plant(-350,205,.65,t+300,7)}${plant(390,200,.8,t+300,8)}`;
+  // Full-bleed meadow: ground now runs past all frame edges, not a rectangular floating patch.
+  objects=`<path d="M-1700 181Q-900 100 -400 169Q-150 192 130 168T1700 148V1700H-1700Z" fill="url(#c-land)"/>
+   <path d="M-1700 252Q-700 173 -260 214Q250 173 900 251T1700 235V1700H-1700Z" fill="#3d7266" opacity=".37"/>
+   <path d="M-1450 201Q-410 145 620 193T1450 204" fill="none" stroke="#d1cba4" stroke-width="2" opacity=".24"/>
+   <ellipse cx="-170" cy="203" rx="110" ry="14" fill="#112e2e" opacity=".23"/>
+   <ellipse cx="172" cy="203" rx="88" ry="12" fill="#112e2e" opacity=".18"/>
+   ${animal(-170,190,1.2,t,0)}${animal(172,183,.86,t,1)}${animal(342,205,.59,t,2)}
+   ${plant(-380,210,.83,t+300,7)}${plant(428,224,.9,t+300,8)}
+   ${Array.from({length:11},(_,i)=>{
+     const x=-710+hash(i+61)*1440,y=235+hash(i+75)*100;
+     return `<path d="M${f(x)} ${f(y)}l-4 -${f(8+hash(i+19)*9)}M${f(x)} ${f(y)}l6 -${f(7+hash(i+10)*11)}" stroke="#bbcf9a" stroke-width="1.3" opacity=".4"/>`;
+   }).join('')}`;
  } else if(scene.id==='humanity'||scene.id==='stewardship') {
-  objects=`<circle cy="-40" r="290" fill="url(#c-halo)" opacity=".8"/>
-   <path d="M-440 310Q-200 170 0 190T440 292V370H-440Z" fill="url(#c-land)"/>
-   <path d="M-310 219Q0 130 305 220" stroke="#e4d0aa" stroke-width="2" fill="none" opacity=".45"/>
-   ${human(-85,190,1.75,false,t)}${human(90,190,1.75,true,t)}
-   <ellipse cy="25" rx="340" ry="250" stroke="#dac59b" stroke-width="1" opacity=".22" fill="none" stroke-dasharray="4 9"/>
-   ${scene.id==='stewardship'?`${plant(-300,225,.9,t+200,1)}${plant(300,225,1.1,t+200,2)}`:''}`;
+  const personScale=vertical?1.8:2.3;
+  // A continuous valley lets the people inhabit an actual landscape, not a cut-off podium.
+  objects=`<circle cy="-55" r="320" fill="url(#c-halo)" opacity=".76"/>
+   <path d="M-1700 175Q-1050 123 -480 184Q30 112 500 163T1700 175V1700H-1700Z" fill="url(#c-land)"/>
+   <path d="M-1700 254Q-900 165 -370 253Q240 201 790 263T1700 226V1700H-1700Z" fill="#47796c" opacity=".39"/>
+   <path d="M-1100 194Q-250 155 600 198T1220 193" stroke="#e6d3aa" stroke-width="2.2" opacity=".26" fill="none"/>
+   ${human(-121,192,personScale,false,t)}${human(122,192,personScale,true,t)}
+   ${scene.id==='stewardship'?`${plant(-520,219,.98,t+200,1)}${plant(520,219,1.04,t+200,2)}`:''}
+   ${Array.from({length:9},(_,i)=>{
+    const x=-850+hash(i+31)*1800;
+    return `<path d="M${f(x)} 285q-6 -13 -8 -18M${f(x)} 285q5 -15 14 -20" stroke="#b9cba1" stroke-width="1.5" opacity=".26" fill="none"/>`;
+   }).join('')}`;
  } else if(scene.id==='good') {
   objects=`<circle r="310" fill="url(#c-flare)" opacity=".6"/>
-   <path d="M-500 360L-410 182L-260 -8L-102 101L44 -71L190 96L347 17L500 189V380H-500Z" fill="url(#c-land)"/>
-   <path d="M-500 296Q-130 123 190 241T500 255V400H-500Z" fill="#34675c" opacity=".5"/>
+   <path d="M-1550 185L-1060 130L-800 20L-520 182L-310 -8L-102 101L44 -71L190 96L347 17L610 151L950 -12L1550 180V1750H-1550Z" fill="url(#c-land)"/>
+   <path d="M-1550 268Q-610 145 190 241T1550 255V1750H-1550Z" fill="#34675c" opacity=".5"/>
    ${plant(-180,180,.9,t+300,1)}${plant(240,150,.8,t+300,3)}
    ${human(20,135,.65,false,t)}${human(75,135,.65,true,t)}
    ${bird(-30,-160,.7,t,5)}${bird(110,-190,.45,t,6)}`;
