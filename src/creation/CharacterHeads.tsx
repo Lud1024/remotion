@@ -153,15 +153,15 @@ export const CharacterHead:React.FC<CharacterHeadProps>=({kind,frame,seed})=>{
   <g data-part="head">
    {/* Fully modeled skull, jaw and chin underneath an actual overhanging hairline. */}
    <path d={feminine?
-    'M-24 -23C-25 -38 -14 -46 0 -46C16 -46 25 -36 25 -21L24 10C20 19 10 27 0 28C-12 27 -21 19 -24 10Z':
-    'M-25 -22C-26 -36 -15 -45 0 -45C16 -45 26 -35 25 -21L25 10Q22 20 13 25L7 28H-7L-14 25Q-23 19 -25 10Z'
+    'M-24 -23C-25 -38 -14 -46 0 -46C16 -46 25 -36 25 -21L24 7C20 15 10 19 0 20C-12 19 -21 15 -24 7Z':
+    'M-25 -22C-26 -36 -15 -45 0 -45C16 -45 26 -35 25 -21L25 7Q22 16 13 18L7 20H-7L-14 18Q-23 15 -25 7Z'
    } fill={SKIN.base} stroke="#c49878" strokeWidth=".85"/>
-   <path d="M-23 -4Q-24 15 -12 23Q-4 28 3 27Q-13 20 -13 3Z" fill={SKIN.shadow} opacity=".15"/>
+   <path d="M-23 -4Q-23 12 -12 17Q-4 21 3 19Q-13 16 -13 3Z" fill={SKIN.shadow} opacity=".15"/>
    <path d="M14 -35Q25 -23 23 -4" fill="none" stroke={SKIN.light} strokeWidth="2.2" opacity=".5"/>
-   <path d={feminine?'M-21 8C-20 17 -11 24 0 26':'M-22 8Q-20 19 -11 24L-5 26'} fill="none" stroke={SKIN.shadow} opacity=".16" strokeWidth="1.6"/>
-   <ellipse cx="-15.8" cy="11.2" rx={feminine?6.4:5.1} ry="3.1" fill={SKIN.blush} opacity={feminine?.20:.14}/>
-   <ellipse cx="15.4" cy="10.6" rx={feminine?6.2:4.8} ry="3.1" fill={SKIN.blush} opacity={feminine?.18:.12}/>
-   <path d="M-15 16Q-11 18 -7 18M10 17Q15 18 18 15" stroke={SKIN.light} strokeWidth=".85" opacity=".45" fill="none"/>
+   <path d={feminine?'M-21 7C-20 13 -11 18 0 19':'M-22 7Q-20 14 -11 18L-5 19'} fill="none" stroke={SKIN.shadow} opacity=".16" strokeWidth="1.6"/>
+   <ellipse cx="-15.8" cy="8.8" rx={feminine?6.4:5.1} ry="2.8" fill={SKIN.blush} opacity={feminine?.20:.14}/>
+   <ellipse cx="15.4" cy="8.4" rx={feminine?6.2:4.8} ry="2.8" fill={SKIN.blush} opacity={feminine?.18:.12}/>
+   <path d="M-15 13Q-11 15 -7 15M10 14Q15 15 18 12" stroke={SKIN.light} strokeWidth=".85" opacity=".45" fill="none"/>
   </g>
   <g data-part="eyebrow-left">
    <path d={feminine?'M-17 -12C-13 -14.3 -9 -14.1 -5.4 -11.4':'M-18 -11.6C-13 -16 -8 -15 -4.8 -12'} stroke="#634a42" strokeWidth={feminine?1.55:2.15} strokeLinecap="round" fill="none" transform={'translate(0 '+browFeel+')'}/>
@@ -174,12 +174,12 @@ export const CharacterHead:React.FC<CharacterHeadProps>=({kind,frame,seed})=>{
    <ExpressiveEye side="right" kind={kind} frame={frame} seed={seed}/>
   </g>
   <g data-part="nose">
-   <path d={feminine?'M.2 4Q-1.3 8.5 -1.5 10Q.4 12 2.2 10.8':'M.3 3.4Q-2.3 9 -2 10.9Q.1 13 3.4 11.3'} stroke="#ac806a" strokeWidth={feminine?1.2:1.4} fill="none" strokeLinecap="round"/>
-   <path d="M2 4L3 8" stroke={SKIN.light} strokeWidth="1.1" fill="none" opacity=".6"/>
+   <path d={feminine?'M.2 2.9Q-1.3 6.3 -1.5 7.7Q.4 9.2 2.2 8.2':'M.3 2.5Q-2.3 6.8 -2 8.2Q.1 9.9 3.4 8.5'} stroke="#ac806a" strokeWidth={feminine?1.2:1.4} fill="none" strokeLinecap="round"/>
+   <path d="M2 3L3 6.2" stroke={SKIN.light} strokeWidth="1.1" fill="none" opacity=".6"/>
   </g>
   <g data-part="mouth">
-   <path d={feminine?'M-7.3 15.8Q-.1 '+(17.9+smile)+' 7.5 15.1':'M-7.8 16.2Q.1 '+(18.3+smile)+' 7 15.7'} stroke="#9c6e67" strokeWidth={feminine?1.65:1.9} fill="none" strokeLinecap="round"/>
-   <path d="M-3 20Q.1 21.2 3.2 19.8" stroke="#fff1d4" strokeWidth=".95" fill="none" opacity=".55"/>
+   <path d={feminine?'M-7.3 12.8Q-.1 '+(14.9+smile)+' 7.5 12.1':'M-7.8 13.2Q.1 '+(15.3+smile)+' 7 12.7'} stroke="#9c6e67" strokeWidth={feminine?1.65:1.9} fill="none" strokeLinecap="round"/>
+   <path d="M-3 17Q.1 18.2 3.2 16.8" stroke="#fff1d4" strokeWidth=".95" fill="none" opacity=".55"/>
   </g>
   {kind==='adam'?<AdamFringe frame={frame} seed={seed}/>:<EveFringe frame={frame} seed={seed}/>}
   <SideLocks kind={kind} frame={frame} seed={seed}/>
