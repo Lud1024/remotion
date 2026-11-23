@@ -57,7 +57,30 @@ for(const scene of alignment.scenes){
    assert.equal(svg,renderWorld(frame,scene,width,height),'Nondeterministic SVG '+scene.id+':'+frame);
    if(scene.id==='animals')assert.ok(svg.includes('data-organic="animal"'));
    if(scene.id==='plants')assert.ok(svg.includes('data-organic="plant"'));
-   if(scene.id==='humanity')assert.ok(svg.includes('data-organic="human"'));
+   if(scene.id==='humanity'){
+    assert.ok(svg.includes('data-organic="human"'));
+    assert.ok(svg.includes('data-detail="portrait"'));
+   }
+   if(scene.id==='origin'){
+    assert.ok(svg.includes('data-environment="spherical-earth"'),'Origin must be spherical, not a water oval');
+    assert.ok(svg.includes('set-planet-clip'));
+   }
+   if(scene.id==='sky'||scene.id==='life'){
+    assert.ok(svg.includes('data-set="sea-and-sky"'),'The sea needs a distinct sky and sea surface');
+   }
+   if(scene.id==='life'){
+    assert.ok(svg.includes('data-environment="sea-sky"'));
+    assert.ok(svg.includes('data-set="fish"'));
+    if(frame>=alignment.markers.birds)assert.ok(svg.includes('data-set="bird"'));
+   }
+   if(scene.id==='eden'){
+    assert.ok(svg.includes('data-environment="eden-orchard"'));
+    assert.ok(svg.includes('data-set="orchard-tree"'));
+    assert.ok(!svg.includes('M-260 260V-160'),'Do not restore the empty arch');
+   }
+   if(['origin','sky','life','land','plants','eden'].includes(scene.id)){
+    assert.ok(svg.includes('data-set-v2="true"'),'Full-bleed artwork should replace old oval dioramas');
+   }
    views++;
   }
  }

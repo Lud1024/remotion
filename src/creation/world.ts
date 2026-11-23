@@ -1,5 +1,6 @@
 import {clamp,f,hash,lerp,smooth} from '../core/util';
 import data from './alignment.json';
+import {renderIllustratedScene} from './illustratedScenes';
 import {renderAir,renderDepthBackdrop,renderForeground,sceneCamera} from './artDirection';
 
 export type Scene=typeof data.scenes[number];
@@ -106,30 +107,63 @@ function animal(x:number,y:number,size:number,t:number,seed:number) {
   ${animalLeg(-49,t+10,seed+2,true)}${animalLeg(40,t+34,seed+3,true)}
  </g>`;
 }
+/** Editorial character illustration: clothing drape, hands, hair, facial micro-expressions and weight. */
 function human(x:number,y:number,size:number,feminine:boolean,t:number) {
  const seed=feminine?7:3;
- const breath=Math.sin(t*.018+seed)*1.6;
+ const breath=Math.sin(t*.017+seed)*1.4;
+ const weight=Math.sin(t*.006+seed*.7)*1.5;
  const head=Math.sin(t*.012+seed*1.2)*1.3;
- const shoulderL=Math.sin(t*.013+seed)*2.4;
- const shoulderR=Math.sin(t*.012+seed+1.5)*2.1;
- const dress=feminine?'#e2c79f':'#a3c3ba';
- const sleeve=feminine?'#d3b489':'#83aaa6';
- return `<g data-organic="human" transform="translate(${f(x)} ${f(y)}) scale(${f(size)})">
-  <ellipse cy="35" rx="29" ry="6" fill="#091d29" opacity=".22"/>
-  <path d="M-14 -23L-16 30 M14 -23L16 30" stroke="#253c4a" stroke-width="15" stroke-linecap="round"/>
-  <path d="M-24 29h21 M4 29h21" stroke="#c5ae88" stroke-width="5" stroke-linecap="round"/>
-  <g transform="translate(0 ${f(breath)})">
-   <path d="M-25 -111Q0 -124 25 -111L${feminine?46:28} -25Q0 -12 ${feminine?-46:-28} -25Z" fill="${dress}"/>
-   <path d="M-21 -101Q-37 -75 -40 -42" fill="none" stroke="${sleeve}" stroke-width="12" stroke-linecap="round" transform="rotate(${f(shoulderL)} -21 -101)"/>
-   <path d="M21 -101Q38 -75 39 -41" fill="none" stroke="${sleeve}" stroke-width="12" stroke-linecap="round" transform="rotate(${f(shoulderR)} 21 -101)"/>
-   <path d="M-18 -110Q0 -120 19 -111" fill="none" stroke="#fff2d2" stroke-width="2.5" opacity=".45"/>
-   <g transform="translate(0 -153) rotate(${f(head)})">
-    <path d="M-11 23h22l4 20h-30Z" fill="#d8b993"/>
-    <ellipse rx="24" ry="29" fill="url(#c-human)" stroke="#987b68" stroke-width=".9"/>
-    <path d="M-22 -10Q-18 -39 6 -33Q28 -29 24 4L17 -10Q-7 -1 -22 -10Z" fill="#213749"/>
-    <path d="M-13 -1h6 M8 -1h6" stroke="#4b4d50" stroke-width="1.5" stroke-linecap="round"/>
-    <path d="M-4 13Q0 16 4 13" stroke="#906d63" stroke-width="1.2" fill="none"/>
-    <ellipse cx="-13" cy="9" rx="5" ry="3" fill="#da9f8b" opacity=".16"/>
+ const blink=Math.max(0,1-Math.abs(((t+seed*43)%151)-75)/3);
+ const look=Math.sin(t*.009+seed)*1.4;
+ const left=Math.sin(t*.012+seed)*2.4;
+ const right=Math.sin(t*.011+seed+1.7)*2.1;
+ const skin='#d6ae8c',skinDark='#aa7e65';
+ const cloth=feminine?'#e5c99d':'#a5c6b9';
+ const dark=feminine?'#a98661':'#537f77';
+ const glow=feminine?'#f8e6c6':'#d7ece0';
+ return `<g data-organic="human" data-detail="portrait" transform="translate(${f(x)} ${f(y)}) scale(${f(size)})">
+  <ellipse cy="37" rx="39" ry="8" fill="#091d29" opacity=".23"/>
+  <g transform="translate(${f(weight)} 0)">
+   <path d="M-16 -31L-17 27M16 -31L16 27" stroke="#314d53" stroke-width="16" stroke-linecap="round"/>
+   <path d="M-28 28Q-19 22 -8 27L-7 34L-29 34Z M7 27Q17 22 27 29V34H7Z" fill="#9f8667"/>
+   <path d="M-27 33h19M8 33h18" fill="none" stroke="#eed5a9" stroke-width="2" opacity=".65"/>
+   <g transform="translate(0 ${f(breath)})">
+    <path d="M-20 -126Q-37 -121 -36 -106L-48 -49Q-27 -34 -16 -39L-10 -88Z" fill="${dark}" opacity=".82"/>
+    <path d="M19 -125Q37 -120 35 -106L48 -49Q28 -34 16 -39L9 -89Z" fill="${dark}" opacity=".82"/>
+    <path d="M-25 -116Q-38 -102 -34 -76L-40 -52Q-35 -46 -29 -51L-20 -74Z" fill="${cloth}" transform="rotate(${f(left)} -25 -116)"/>
+    <path d="M25 -116Q39 -102 35 -77L41 -52Q37 -45 30 -50L21 -74Z" fill="${cloth}" transform="rotate(${f(right)} 25 -116)"/>
+    <ellipse cx="-36" cy="-48" rx="7" ry="10" fill="${skin}"/>
+    <ellipse cx="36" cy="-48" rx="7" ry="10" fill="${skin}"/>
+    <path d="M-8 -139Q-26 -131 -28 -111Q-31 -78 -42 -27Q-2 -13 45 -27Q29 -79 28 -115Q22 -133 7 -139Z" fill="${cloth}" stroke="${dark}" stroke-width="1.4"/>
+    <path d="M-8 -138Q-23 -119 -15 -78L-10 -31 M11 -137Q26 -119 23 -81L27 -32" stroke="${glow}" stroke-width="2.8" opacity=".42" fill="none"/>
+    <path d="M-27 -57Q0 -49 30 -58" stroke="${dark}" stroke-width="5" fill="none" opacity=".58"/>
+    <path d="M-28 -53Q0 -46 30 -54" stroke="${glow}" stroke-width="1.3" fill="none" opacity=".65"/>
+    ${feminine?`<path d="M-7 -139Q-24 -123 -18 -107L-1 -86Q14 -108 17 -132" fill="#dcb888" opacity=".37"/>
+      <path d="M-39 -30Q-6 -16 40 -28" stroke="#fff0cf" stroke-width="3" opacity=".45" fill="none"/>
+      <path d="M-32 -99Q-38 -62 -38 -38 M29 -107Q33 -74 35 -39" stroke="#a47f59" stroke-width="1.4" opacity=".5" fill="none"/>`:`<path d="M-16 -135Q0 -119 16 -135" fill="none" stroke="#e9e1cf" stroke-width="5"/>
+      <path d="M-32 -35Q-8 -28 35 -36" fill="none" stroke="#6e9f92" stroke-width="1.7" opacity=".55"/>`}
+    <g transform="translate(0 -161) rotate(${f(head)})">
+     ${feminine?`<path d="M-25 -12Q-37 -48 -15 -58Q18 -73 34 -36L27 26Q15 41 9 41L-19 30Q-32 13 -25 -12Z" fill="#302f38"/>`:''}
+     <path d="M-10 22h20l3 25h-26Z" fill="${skin}"/>
+     <ellipse cx="-22" cy="0" rx="5" ry="10" fill="${skinDark}"/>
+     <ellipse cx="22" cy="0" rx="5" ry="10" fill="${skinDark}"/>
+     <path d="M-22 -23Q-23 -39 0 -42Q26 -40 23 -16L23 15Q15 33 0 34Q-17 30 -23 15Z" fill="url(#c-human)" stroke="#af866d" stroke-width="1.2"/>
+     <path d="M-20 -22Q-28 -48 -5 -53Q23 -55 29 -28L21 -12Q11 -25 8 -31Q-4 -17 -20 -22Z" fill="#30313a"/>
+     ${feminine?`<path d="M-25 -25Q-34 -11 -29 13Q-26 27 -19 31L-18 10Q-23 -6 -18 -19 M22 -23Q32 -10 29 12Q26 30 19 33L21 11" fill="#302f38"/>`:`<path d="M-23 -16Q-13 -21 -7 -28Q6 -22 22 -22" stroke="#45434b" stroke-width="3.2" fill="none"/>`}
+     <path d="M-16 -3q6 -4 12 -1M6 -4q5 -3 10 1" stroke="#554b48" stroke-width="1.7" fill="none" opacity=".8"/>
+     <g transform="translate(${f(look)} 0)">
+      <ellipse cx="-10" cy="2" rx="3.2" ry="${f(2.7*(1-blink)+.15)}" fill="#453b37"/>
+      <ellipse cx="10" cy="2" rx="3.2" ry="${f(2.7*(1-blink)+.15)}" fill="#453b37"/>
+      <circle cx="-9.3" cy="1.4" r=".8" fill="#fff9e8" opacity=".9"/>
+      <circle cx="10.7" cy="1.4" r=".8" fill="#fff9e8" opacity=".9"/>
+     </g>
+     <path d="M0 2l-3 9q3 2 6 0" stroke="#9d7969" stroke-width="1.15" fill="none" opacity=".75"/>
+     <path d="M-7 18Q0 21 7 18" stroke="#a46f67" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+     <ellipse cx="-15" cy="13" rx="6.3" ry="3.2" fill="#d99185" opacity=".17"/>
+     <ellipse cx="15" cy="13" rx="6.3" ry="3.2" fill="#d99185" opacity=".17"/>
+     <path d="M-18 -28Q-2 -44 16 -30" stroke="#79716a" opacity=".3" stroke-width="2" fill="none"/>
+    </g>
+    <path d="M-19 -118Q-4 -112 13 -119" stroke="${glow}" stroke-width="1.8" opacity=".4" fill="none"/>
    </g>
   </g>
  </g>`;
@@ -146,6 +180,12 @@ export const THEMES:Record<string,{top:string;bottom:string;accent:string}>={
 
 /** New visual system. None of the former seven SVG scenes is used here. */
 export function renderWorld(frame:number,scene:Scene,width:number,height:number) {
+ const newSets=new Set(['origin','sky','land','plants','life','eden']);
+ if(newSets.has(scene.id)) {
+  const treeWord=data.words.find(w=>w.text.startsWith('árboles'));
+  const treesAt=treeWord?treeWord.startMs/1000*data.fps:scene.start+180;
+  return renderIllustratedScene(scene.id,frame,scene.start,width,height,frame>=data.markers.birds,smooth((frame-treesAt+8)/45));
+ }
  const vertical=height>width,t=frame-scene.start;
  const theme=THEMES[scene.id],unit=Math.min(width,height)/1080;
  const reframe=vertical||scene.id==='eden'?0:smooth((t-(scene.id==='hook'?220:130))/35);
@@ -169,36 +209,11 @@ export function renderWorld(frame:number,scene:Scene,width:number,height:number)
    <circle cx="180" cy="55" r="95" fill="none" stroke="#e4d6b3" stroke-width="2" stroke-dasharray="6 9" opacity=".55"/>
    <path d="M-4 -10Q78 -87 165 -28" fill="none" stroke="#d9bc7f" stroke-width="2" stroke-dasharray="6 8"/>
    <circle cx="${f(-125+Math.cos(t*.012)*125)}" cy="${f(-10+Math.sin(t*.012)*125)}" r="4" fill="#fff4d4"/>`;
- } else if(scene.id==='origin') {
-  objects=`${waterSurface(130,420,110,t,true)}
-   <ellipse cx="${f(Math.sin(t*.009)*80)}" cy="35" rx="240" ry="42" fill="url(#c-halo)"/>
-   <path d="M-240 -30Q-40 ${f(-85+Math.sin(t*.02)*12)} 240 -22" fill="none" stroke="#c8dbce" stroke-width="1.5" opacity=".35"/>`;
  } else if(scene.id==='light') {
   const reveal=smooth((frame-data.markers.light)/28);
   objects=`<circle r="${f(6+reveal*570)}" fill="url(#c-flare)"/>
    ${Array.from({length:32},(_,i)=>{const a=i*TAU/32+t*.0008;return `<path d="M${f(Math.cos(a)*20)} ${f(Math.sin(a)*20)}L${f(Math.cos(a)*590)} ${f(Math.sin(a)*590)}" stroke="#ffefc0" stroke-width="${i%3?1:3}" opacity="${f(reveal*(i%3?.08:.18))}"/>`;}).join('')}
    ${reveal>.8?`<path d="M0 -255A255 255 0 0 1 0 255Z" fill="#09182d" opacity="${f(smooth((t-140)/60)*.7)}"/><circle r="255" fill="none" stroke="#ffecc2" stroke-width="1.4" opacity=".6"/>`:''}`;
- } else if(scene.id==='sky') {
-  const opening=smooth(t/100);
-  objects=`<g opacity=".56">${waterSurface(-55-opening*160,450,105,t*.6)}</g>${waterSurface(100+opening*100,450,120,t)}
-   <ellipse rx="390" ry="${f(40+opening*150)}" fill="url(#c-halo)"/>
-   ${Array.from({length:5},(_,i)=>`<path d="M${-240+i*120} ${f(-35-opening*65)}q${f(Math.sin(t*.008+i)*12)} 65 0 125" stroke="#c5e5da" stroke-width="${12+i*3}" opacity=".025" fill="none"/>`).join('')}`;
- } else if(scene.id==='land'||scene.id==='plants') {
-  const growth=scene.id==='land'?smooth(t/90):1;
-  objects=`${waterSurface(185,490,140,t)}
-   <path d="M-375 175Q-300 310 0 292Q300 297 370 175L355 216Q280 335 0 330Q-295 335 -363 215Z" fill="url(#c-soil)"/>
-   <path d="M-375 175Q-320 ${f(150-growth*130)} -210 ${f(165-growth*210)}Q-45 ${f(140-growth*65)} 64 ${f(160-growth*200)}Q230 ${f(165-growth*120)} 370 175C360 223 180 290 -20 282C-215 289 -354 238 -375 175Z" fill="url(#c-land)"/>
-   <path d="M-375 175Q-320 ${f(150-growth*130)} -210 ${f(165-growth*210)}Q-45 ${f(140-growth*65)} 64 ${f(160-growth*200)}Q230 ${f(165-growth*120)} 370 175" fill="none" stroke="#ebdfb9" stroke-width="2" opacity=".6"/>
-   <path d="M-350 204Q-245 285 -20 282Q225 288 350 204" fill="none" stroke="#d8d6ad" stroke-width="1.8" opacity=".5"/>
-   <path d="M-305 252Q-90 322 220 272M-270 272Q-80 322 155 297" fill="none" stroke="#243f43" stroke-width="1.5" opacity=".25"/>
-   ${Array.from({length:18},(_,i)=>`<path d="M${f(-270+hash(i+3)*530)} ${f(130+hash(i+41)*90)}q9 -3 19 0" stroke="#cbd6a3" stroke-width="1.2" fill="none" opacity=".18"/>`).join('')}`;
-  if(scene.id==='plants') {
-   objects+=Array.from({length:11},(_,i)=>plant(-270+i*54,75+Math.sin(i*2)*45,.55+hash(i)*.65,t+40,i)).join('');
-   const treeWord=data.words.find(w=>w.text.startsWith('árboles'));
-   const treesAt=treeWord?treeWord.startMs/1000*data.fps:scene.start+180;
-   const growth=smooth((frame-treesAt+8)/45);
-   if(growth>0)objects+=fruitTree(-180,110,.9,t,growth)+fruitTree(170,130,1.15,t+30,growth);
-  }
  } else if(scene.id==='cosmos') {
   const orbit=t*.003;
   objects=`<ellipse rx="390" ry="180" fill="none" stroke="#9eacc8" stroke-width="1" opacity=".35" transform="rotate(-18)"/>
@@ -207,29 +222,36 @@ export function renderWorld(frame:number,scene:Scene,width:number,height:number)
    ${orb(220,80,72,'url(#c-moon)')}
    ${Array.from({length:80},(_,i)=>{const x=hash(i+7)*950-475,y=hash(i+88)*700-350;return `<circle cx="${f(x)}" cy="${f(y)}" r="${f(1+hash(i)*2)}" fill="#f0ead1" opacity="${f(.3+Math.sin(t*.025+i)*.2)}"/>`;}).join('')}
    <circle cx="${f(Math.cos(orbit)*390)}" cy="${f(Math.sin(orbit)*180)}" r="6" fill="#f0c578"/>`;
- } else if(scene.id==='life') {
-  const birdsNow=frame>=data.markers.birds;
-  objects=`<ellipse cy="80" rx="480" ry="280" fill="url(#c-water)" opacity=".65"/>
-   ${Array.from({length:birdsNow?6:15},(_,i)=>fish(((hash(i)*900+t*(.9+hash(i+3)))%1000)-500,20+hash(i+50)*250,.4+hash(i+9)*.8,t,i%3?'#8fcec3':'#e4c189')).join('')}
-   ${birdsNow?Array.from({length:9},(_,i)=>bird(-330+i*85+Math.sin(t*.01)*30,-140-Math.sin(i*.9)*80,.5+hash(i)*.4,t,i)).join(''):''}
-   <path d="M-420 -20Q0 -60 420 -20" stroke="#b0ddd0" stroke-width="2" opacity=".5" fill="none"/>`;
  } else if(scene.id==='animals') {
-  objects=`<path d="M-520 270Q-240 85 0 175T530 265V370H-520Z" fill="url(#c-land)"/>
-   <path d="M-450 194Q-240 123 -30 187T450 213" fill="none" stroke="#d9c9a2" stroke-width="2" opacity=".38"/>
-   <ellipse cx="-160" cy="193" rx="136" ry="20" fill="#0d3035" opacity=".25"/>
-   <ellipse cx="170" cy="188" rx="88" ry="12" fill="#0d3035" opacity=".22"/>
-   ${animal(-160,185,1.2,t,0)}${animal(170,180,.82,t,1)}${animal(310,205,.55,t,2)}
-   ${plant(-350,205,.65,t+300,7)}${plant(390,200,.8,t+300,8)}`;
+  // Full-bleed meadow: ground now runs past all frame edges, not a rectangular floating patch.
+  objects=`<path d="M-1700 181Q-900 100 -400 169Q-150 192 130 168T1700 148V1700H-1700Z" fill="url(#c-land)"/>
+   <path d="M-1700 252Q-700 173 -260 214Q250 173 900 251T1700 235V1700H-1700Z" fill="#3d7266" opacity=".37"/>
+   <path d="M-1450 201Q-410 145 620 193T1450 204" fill="none" stroke="#d1cba4" stroke-width="2" opacity=".24"/>
+   <ellipse cx="-170" cy="203" rx="110" ry="14" fill="#112e2e" opacity=".23"/>
+   <ellipse cx="172" cy="203" rx="88" ry="12" fill="#112e2e" opacity=".18"/>
+   ${animal(-170,190,1.2,t,0)}${animal(172,183,.86,t,1)}${animal(342,205,.59,t,2)}
+   ${plant(-380,210,.83,t+300,7)}${plant(428,224,.9,t+300,8)}
+   ${Array.from({length:11},(_,i)=>{
+     const x=-710+hash(i+61)*1440,y=235+hash(i+75)*100;
+     return `<path d="M${f(x)} ${f(y)}l-4 -${f(8+hash(i+19)*9)}M${f(x)} ${f(y)}l6 -${f(7+hash(i+10)*11)}" stroke="#bbcf9a" stroke-width="1.3" opacity=".4"/>`;
+   }).join('')}`;
  } else if(scene.id==='humanity'||scene.id==='stewardship') {
-  objects=`<circle cy="-40" r="290" fill="url(#c-halo)" opacity=".8"/>
-   <path d="M-440 310Q-200 170 0 190T440 292V370H-440Z" fill="url(#c-land)"/>
-   <path d="M-310 219Q0 130 305 220" stroke="#e4d0aa" stroke-width="2" fill="none" opacity=".45"/>
-   ${human(-85,190,1.75,false,t)}${human(90,190,1.75,true,t)}
-   <ellipse cy="25" rx="340" ry="250" stroke="#dac59b" stroke-width="1" opacity=".22" fill="none" stroke-dasharray="4 9"/>
-   ${scene.id==='stewardship'?`${plant(-300,225,.9,t+200,1)}${plant(300,225,1.1,t+200,2)}`:''}`;
+  const personScale=vertical?1.8:2.3;
+  // A continuous valley lets the people inhabit an actual landscape, not a cut-off podium.
+  objects=`<circle cy="-55" r="320" fill="url(#c-halo)" opacity=".76"/>
+   <path d="M-1700 175Q-1050 123 -480 184Q30 112 500 163T1700 175V1700H-1700Z" fill="url(#c-land)"/>
+   <path d="M-1700 254Q-900 165 -370 253Q240 201 790 263T1700 226V1700H-1700Z" fill="#47796c" opacity=".39"/>
+   <path d="M-1100 194Q-250 155 600 198T1220 193" stroke="#e6d3aa" stroke-width="2.2" opacity=".26" fill="none"/>
+   ${human(-121,192,personScale,false,t)}${human(122,192,personScale,true,t)}
+   ${scene.id==='stewardship'?`${plant(-520,219,.98,t+200,1)}${plant(520,219,1.04,t+200,2)}`:''}
+   ${Array.from({length:9},(_,i)=>{
+    const x=-850+hash(i+31)*1800;
+    return `<path d="M${f(x)} 285q-6 -13 -8 -18M${f(x)} 285q5 -15 14 -20" stroke="#b9cba1" stroke-width="1.5" opacity=".26" fill="none"/>`;
+   }).join('')}`;
  } else if(scene.id==='good') {
-  objects=`<circle r="310" fill="url(#c-flare)" opacity=".6"/><ellipse cy="180" rx="390" ry="85" fill="#415e63"/>
-   <path d="M-380 170L-210 -10L-80 100L40 -45L170 95L330 30L390 170Z" fill="url(#c-land)"/>
+  objects=`<circle r="310" fill="url(#c-flare)" opacity=".6"/>
+   <path d="M-1550 185L-1060 130L-800 20L-520 182L-310 -8L-102 101L44 -71L190 96L347 17L610 151L950 -12L1550 180V1750H-1550Z" fill="url(#c-land)"/>
+   <path d="M-1550 268Q-610 145 190 241T1550 255V1750H-1550Z" fill="#34675c" opacity=".5"/>
    ${plant(-180,180,.9,t+300,1)}${plant(240,150,.8,t+300,3)}
    ${human(20,135,.65,false,t)}${human(75,135,.65,true,t)}
    ${bird(-30,-160,.7,t,5)}${bird(110,-190,.45,t,6)}`;
@@ -238,13 +260,7 @@ export function renderWorld(frame:number,scene:Scene,width:number,height:number)
    <path d="M-470 170Q-230 -35 0 130T470 155V320H-470Z" fill="#344e61"/><path d="M-470 210Q-190 70 60 190T470 205V340H-470Z" fill="#1c394c"/>
    <path d="M-300 250Q-30 180 280 240" fill="none" stroke="#c4c8bf" stroke-width="1.5" opacity=".3"/>
    ${Array.from({length:24},(_,i)=>`<circle cx="${f(hash(i)*900-450)}" cy="${f(hash(i+100)*400-350)}" r="1.5" fill="#dee5da" opacity=".5"/>`).join('')}`;
- } else {
-  const opening=smooth((t-65)/110);
-  objects=`<path d="M-260 260V-160Q0 -460 260 -160V260" fill="none" stroke="#a5baa0" stroke-width="9" opacity=".65"/>
-   <path d="M-230 260V-150Q0 -420 230 -150V260Z" fill="#0b1c29"/>
-   <g opacity="${f(opening)}"><ellipse cy="20" rx="230" ry="250" fill="url(#c-halo)"/>${plant(-110,240,1.1,t+100,3)}${plant(90,250,1.3,t+100,1)}<path d="M0 270Q-20 130 0 -50" fill="none" stroke="#b6b595" stroke-width="30" opacity=".4"/></g>
-   <path d="M-280 275H280" stroke="#849f94" stroke-width="2"/>`;
- }
+ } else {objects='';}
  return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" data-world="${scene.id}" data-shot="${shot}">
  ${defs}${materialDefs}
  <defs><radialGradient id="c-vignette"><stop offset=".3" stop-color="#020b15" stop-opacity="0"/><stop offset="1" stop-color="#020b15" stop-opacity=".55"/></radialGradient></defs>

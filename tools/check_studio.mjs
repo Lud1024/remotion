@@ -38,13 +38,22 @@ try {
   if(frame<d.markers.close)assert.equal(state.branding,false);
   if(frame>=d.markers.close+24)assert.ok(state.ending&&state.branding,'Final black card must be present');
   assert.ok(state.subtitleHeight<190,'Captions exceed two lines at this size');
-  if(capture){const {value}=await page._client().send('Page.captureScreenshot',{format:'png',clip:{...state.rect,scale:1},captureBeyondViewport:true});fs.writeFileSync(`qa/rebuild/studio/${id}-${scene.id}.png`,Buffer.from(value.data,'base64'));}
+  if(capture){const {value}=await page._client().send('Page.captureScreenshot',{format:'png',clip:{...state.rect,scale:1},captureBeyondViewport:true});fs.writeFileSync(`qa/rebuild/studio/${id}-${scene.id}-${frame}.png`,Buffer.from(value.data,'base64'));}
   report.push({id,frame,scene:scene.id,caption:state.subtitle,highlighted:state.highlighted});
  }
  for(const id of ['LaCreacion','LaCreacionVertical']) {
   for(const frame of samples)await visit(id,frame,true);
+  // Explicit narrative moments: the generic sample could miss the birds,
+  // mature trees or the garden and previously got overwritten by the ending.
+  const detailedFrames=[
+   d.markers.birds+22,
+   d.words.find(w=>w.text.startsWith('árboles'))?.startMs/1000*d.fps+38,
+   d.markers.eden+45,
+   d.markers.close-25,
+  ].filter(f=>Number.isFinite(f)).map(f=>Math.floor(f));
+  for(const frame of detailedFrames)await visit(id,frame,true);
   await visit(id,d.durationInFrames-1,true);
-  console.log(`STUDIO_QA ${id}: all 14 scenes + ending passed`);
+  console.log(`STUDIO_QA ${id}: all 14 scenes + ending and key environmental moments passed`);
  }
  for(const word of keyWords) {
   // Check both sides of each emphasis boundary in the horizontal composition.
