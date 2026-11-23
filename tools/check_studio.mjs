@@ -64,8 +64,8 @@ try {
    assert.deepEqual(state.headContours.map(h=>h.kind),['adam','eve']);
    assert.ok(state.headContours.every(h=>h.order&&h.integrated&&h.hairFront&&h.skull),
     'Hair must extend over the crown, integrate with the forehead and remain in front of the skull');
-   assert.ok(state.headContours.every(h=>typeof h.faceRatio==='number'&&h.faceRatio>1.32&&h.faceRatio<1.58),
-    'Face proportion must remain compact without losing its original proportions');
+   assert.ok(state.headContours.every(h=>typeof h.faceRatio==='number'&&h.faceRatio>1.22&&h.faceRatio<1.41),
+    'Adam and Eve must have compact faces, not elongated ovals');
   }
   if(capture){const {value}=await page._client().send('Page.captureScreenshot',{format:'png',clip:{...state.rect,scale:1},captureBeyondViewport:true});fs.writeFileSync(`qa/rebuild/studio/${id}-${scene.id}-${frame}.png`,Buffer.from(value.data,'base64'));}
   report.push({id,frame,scene:scene.id,caption:state.subtitle,highlighted:state.highlighted});
