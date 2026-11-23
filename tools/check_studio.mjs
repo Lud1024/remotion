@@ -23,7 +23,7 @@ try {
      await new Promise(r=>setTimeout(r,100));
      const svg=root.querySelector('[data-world]'),r=root.getBoundingClientRect(),subs=root.querySelector('[data-subtitles]'),s=subs?.getBoundingClientRect();
      const all=[...root.querySelectorAll('svg')];
-     return {frame:Number(root.getAttribute('data-creation-frame')),scene:svg?.getAttribute('data-world'),invalid:all.some(s=>/NaN|undefined|Infinity/.test(s.outerHTML)),xmlError:all.some(s=>!!new DOMParser().parseFromString(s.outerHTML,'image/svg+xml').querySelector('parsererror')),subtitle:subs?.textContent??null,highlighted:[...root.querySelectorAll('[data-emphasized="true"]')].map(n=>Number(n.getAttribute('data-word'))),branding:root.textContent.includes('SHALÓM'),ending:!!root.querySelector('[data-ending]'),subtitleHeight:s?s.height/(r.height/Number(svg?.getAttribute('height'))):0,rect:{x:r.x,y:r.y,width:r.width,height:r.height}};
+     return {frame:Number(root.getAttribute('data-creation-frame')),scene:svg?.getAttribute('data-world'),cast:[...root.querySelectorAll('[data-character-design]')].map(n=>n.getAttribute('data-character-design')),castLayers:[...root.querySelectorAll('[data-character-cast]')].map(n=>n.getAttribute('data-character-cast')),hair:[...root.querySelectorAll('[data-part="hair-front"]')].length,eyes:[...root.querySelectorAll('[data-part="eye-left"], [data-part="eye-right"]')].length,invalid:all.some(s=>/NaN|undefined|Infinity/.test(s.outerHTML)),xmlError:all.some(s=>!!new DOMParser().parseFromString(s.outerHTML,'image/svg+xml').querySelector('parsererror')),subtitle:subs?.textContent??null,highlighted:[...root.querySelectorAll('[data-emphasized="true"]')].map(n=>Number(n.getAttribute('data-word'))),branding:root.textContent.includes('SHALÓM'),ending:!!root.querySelector('[data-ending]'),subtitleHeight:s?s.height/(r.height/Number(svg?.getAttribute('height'))):0,rect:{x:r.x,y:r.y,width:r.width,height:r.height}};
     }
     await new Promise(r=>setTimeout(r,80));
    }
@@ -38,6 +38,16 @@ try {
   if(frame<d.markers.close)assert.equal(state.branding,false);
   if(frame>=d.markers.close+24)assert.ok(state.ending&&state.branding,'Final black card must be present');
   assert.ok(state.subtitleHeight<190,'Captions exceed two lines at this size');
+  if(scene.id==='animals'){
+   assert.deepEqual(state.cast,['llama','llama','llama'],'Three editable SVG animals expected');
+   assert.deepEqual(state.castLayers,['animals']);
+  }
+  if(['humanity','stewardship','good'].includes(scene.id)){
+   assert.deepEqual(state.cast,['adam','eve'],'Adam and Eve must retain their order');
+   assert.deepEqual(state.castLayers,[scene.id]);
+   assert.equal(state.hair,2,'Separate front hair layers expected');
+   assert.equal(state.eyes,4,'Each human needs two independent eyes');
+  }
   if(capture){const {value}=await page._client().send('Page.captureScreenshot',{format:'png',clip:{...state.rect,scale:1},captureBeyondViewport:true});fs.writeFileSync(`qa/rebuild/studio/${id}-${scene.id}-${frame}.png`,Buffer.from(value.data,'base64'));}
   report.push({id,frame,scene:scene.id,caption:state.subtitle,highlighted:state.highlighted});
  }
